@@ -5,11 +5,11 @@
 
 **Date:** Dec 2020/Jan 2021
 
-**1. What is the data source? Do you have permission to use the data?**
+**1. What is the aim of this study?**
 
-**2. What is the aim of this study?**
+**2. What's the main question being asked or hypothesis being tested in this study?**
 
-**3. What's the main question being asked or hypothesis being tested in this study?**
+**3. What is the data source? Do you have permission to use the data?**
 
 **4. Describe the key independent and dependent variable(s).**
 

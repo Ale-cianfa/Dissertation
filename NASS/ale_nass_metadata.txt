@@ -1,0 +1,65 @@
+NASS data for Alessandra Cianfanelli - METADATA
+
+- Sightings: ale_nass-sightings_tot.csv
+- Effort: ale_nass-effort.gpkg
+- Bounding box: 65-68 N, 9-28W
+- Survey years: 2001, 2005, 2015
+
+# Sightings fields:
+
+- vID: vessel ID. Vessel information can be found in nass_vessels.csv
+
+- da: data, yyyymmyy
+
+- ti: time: h(or hh)mmss
+
+- la2, lo2: observer coordinates at each sighting (effort terminated at this point)
+
+- bfss: Beaufort sea state
+
+- wea: weather conditions 
+  $wea=1 if $cloudc<25;
+  $wea=2 if $cloudc>=25;
+  $wea=3 if $cloudc>=70;
+  $wea=4 if $cloudc>=90;
+  $wea=9 if $weax==2;#drizzl
+  $wea=6 if $weax==1;#mist
+  $wea=7 if $weax==6;#fog
+  $wea=8 if $weax==5;#fogpatch
+  $wea=5 if $weax==3 or $weax==4;#rain, light heavy
+ weather 0 if undefined (in afms82 rain=5 and fog=7 was recorded else 0) 
+
+- sec: seconds since effort started
+
+- nm: nautical miles since effort started
+
+- la1, lo1: vessel location when effort started. (la1, lo1) and (la2, lo2) were joined to form effort lines (ale_nas-effort.gpkg)
+
+- nobs: number of observers. Format is x.y, where x = number on upper platform, y = number on tower platform (higher). 
+
+- spec: species 
+oo = orca
+ba = common minke whale
+mn = humpabck whale
+pm = sperm whale
+ll = white-beaked dolphin
+bm = blue whale
+bp = fin whale
+ha = northern bottlenose whale
+gm = long-finned pilot whale
+
+- pods: number of animals seen
+
+- sight: sighting? 1 = yes
+
+- rdist: horizontal distance between vessel path and cetacean(s)
+
+- ang: azimuth between vessel path (ahead = 0) and cetacean(s)
+
+- bl_leg: name of effort leg
+
+- datetime: date + time (converts directly to POSIXct)
+
+- year, month: year, month
+
+- platform: d = double, s = single

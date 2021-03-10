@@ -1,5 +1,6 @@
 # CROPPING THE DATA FOR MY DISSERTATION 
 
+
 ## PACKAGES----
 
 library(tidyverse)
@@ -94,8 +95,9 @@ str(imp_locations)
     geom_point(data = imp_locations, aes(x = long, y = lat, colour = group), 
                colour = c("#0E4749", "#CC978E"), size = 3) +
     geom_point(data = new_survey, aes(x = lo2, y = la2, colour = year)) + #adding pod sixe ad a point size, not sure is useful, just an idea
-    scale_color_manual(values = c("#70161E", "#F6BE13", "#5C80BC")) +
-    #geom_rect(aes(xmin = 65, xmax = 68, ymin = -9, ymax = -20),
+    #scale_color_manual(values = c("#70161E", "#F6BE13", "#5C80BC")) +
+   scale_color_manual(values = c("#A06B9A", "#8D9EC6", "#082241")) +
+   #geom_rect(data = ice_map, aes(xmin = 65, xmax = 68, ymin = -9, ymax = -20),
              #fill = "transparent", color = "red", size = 0.5) + 
     theme_minimal() + 
     theme(legend.position = "right",
@@ -103,13 +105,14 @@ str(imp_locations)
          legend.text = element_text(size = 12)) +
     geom_label_repel(data = imp_locations, aes(x = long, y = lat,
                                                label = location),
-                     box.padding = 5, size = 5, alpha = 0.9, nudge_x = 1,
+                     box.padding = 5, size = 5, alpha = 0.9, nudge_y = -0.5,
                      min.segment.length = 0, inherit.aes = FALSE) + 
     ylim(62,68) +
     xlim(-27, -10) +
-    labs(x = "\nLongitude", y = "Latitude\n") + 
     labs(title = "", colour = "Survey Year") +
     coord_map())
+
+#ggsave(iceland, file = "img/survey1.png", height = 5, width = 8)
 
 ## Adding effort to the map----
 

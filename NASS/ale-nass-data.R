@@ -31,6 +31,7 @@ map.theme <- theme(axis.text.x = element_text(size = 13, margin=margin(7,0,0,0))
                    legend.text = element_text(size = 13))
 
 # also going to upload shapefile of Iceland
+iceland <- st_read("data/iceland-isn93/is50v_strandlina_flakar_24122017.shp")
 
 ######################
 ### SPECIFICATIONS ###

@@ -16,10 +16,10 @@ getwd()
 ## LOADING FILES----
 
 ### Iceland shapefile (that I do not have)----
-iceland <- st_read("data/iceland-isn93/is50v_strandlina_flakar_24122017.shp")
+#iceland <- st_read("data/iceland-isn93/is50v_strandlina_flakar_24122017.shp")
 
 ### NASS survey----
-survey <- read.csv("NASS/ale_nass-sightings_tot.csv")
+survey <- read.csv("original NASS/ale_nass-sightings_tot.csv")
 head(survey)
 str(survey)
 survey$spec <- as.factor(survey$spec)
@@ -118,12 +118,12 @@ str(imp_locations)
 ## Adding effort to the map----
 
 
-effort <- st_read("NASS/ale_nass-effort.gpkg") %>% 
+effort <- st_read("original NASS/ale_nass-effort.gpkg") %>% 
   # crop to bounding box
   st_crop(box)
 
 #TRYING MY NEW CSV----
-n_ice_survey <- read.csv("north_nass_survey_prova.csv") #this is the new csv file with the broke down pods
+n_ice_survey <- read.csv("modified NASS/north_nass_survey_prova.csv") #this is the new csv file with the broke down pods
 
 n_ice_survey$year <- as.factor(n_ice_survey$year)
 str(n_ice_survey)
@@ -161,12 +161,13 @@ sightings_x_years$total_count <- as.factor(sightings_x_years$total_count)
 
 (sightings_x_years_plot <- ggplot(sightings_x_years, aes(x = year, y = total_count, fill = total_count)) + #specifying what to put on the axis
     geom_bar(stat = "identity") + 
-    scale_fill_manual(values = c("#A06B9A", "#8D9EC6", "#082241")) +
+    scale_fill_manual(values = c("#A06B9A", "#8D9EC6", "#082241"), 
+                      labels=c("2001", "2007", "2015")) + #not sure if i need the legend at all if I already have the years under the bars
     theme_minimal() + 
     theme(legend.position = "right",
           legend.title = element_text(size = 13, face ="bold"),
           legend.text = element_text(size = 12)) +
-    labs(fill = "Total Sightings", #need to change name in the legend so color of the bar = years
+    labs(fill = "Total Sightings", 
          x = "Years", 
          y ="Total Sightings"))
 

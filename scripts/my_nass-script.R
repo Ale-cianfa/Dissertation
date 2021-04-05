@@ -161,17 +161,15 @@ sightings_x_years$total_count <- as.factor(sightings_x_years$total_count)
 
 (sightings_x_years_plot <- ggplot(sightings_x_years, aes(x = year, y = total_count, fill = total_count)) + #specifying what to put on the axis
     geom_bar(stat = "identity") + 
-    scale_fill_manual(values = c("#A06B9A", "#8D9EC6", "#082241"), 
-                      labels=c("2001", "2007", "2015")) + #not sure if i need the legend at all if I already have the years under the bars
-    theme_minimal() + 
-    theme(legend.position = "right",
+    scale_fill_manual(values = c("#8D9EC6","#082241", "#A06B9A")) +    theme_minimal() + 
+    theme(legend.position = "none",
           legend.title = element_text(size = 13, face ="bold"),
           legend.text = element_text(size = 12)) +
     labs(fill = "Total Sightings", 
          x = "Years", 
          y ="Total Sightings"))
 
-ggsave(sightings_x_years_plot, file = "img/sightings_x_years.png", height = 5, width = 9)
+#ggsave(sightings_x_years_plot, file = "img/sightings_x_years.png", height = 5, width = 9)
 
 #this could go into an important discussion on the implicit bias that, maybe 2007 might have been a great year, we just do't know becuse there aren't nearly as many sightings
 

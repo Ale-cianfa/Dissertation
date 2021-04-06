@@ -23,6 +23,8 @@ survey <- read.csv("original NASS/ale_nass-sightings_tot.csv")
 head(survey)
 str(survey)
 survey$spec <- as.factor(survey$spec)
+
+unique(survey$vID) #TOTAL NUMBER OF VESSELS
 #we are going to use la2 and lo2 as the coordinates for the whales, because those were the locations
   #of observers when they saw the whale and is as good as its gonna get 
 

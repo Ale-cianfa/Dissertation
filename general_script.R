@@ -10,6 +10,23 @@ library(maps) #for the base map data
 library(hrbrthemes) #for the fonts in ggplot
 library(ggrepel)
 library(ggthemes) #for extra map themes
+library(raster)
+library(rgdal)
+library(sp)
+
+
+### NASS survey----
+survey <- read.csv("original NASS/ale_nass-sightings_tot.csv")
+head(survey)
+str(survey)
+survey$spec <- as.factor(survey$spec)
+
+# NASS ships----
+
+vessels <- read.csv("original NASS/nass_vessels.csv")
+
+unique(survey$vID) #TOTAL NUMBER OF VESSELS
+
 
 ### Iceland map background----
 
@@ -74,6 +91,23 @@ sightings_x_years$total_count <- as.factor(sightings_x_years$total_count)
          x = "Years", 
          y ="Total Sightings"))
 #ggsave(sightings_x_years_plot, file = "img/sightings_x_years.png", height = 5, width = 9)
+
+## Making csv into a shapefile for qgis----
+
+#I did this directly in qgis
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -12,23 +12,24 @@ library(ggrepel)
 library(ggthemes) #for extra map themes
 library(raster)
 library(rgdal)
+library(rasterVis)
 library(sp)
 
 
-### NASS survey----
+## NASS survey----
 survey <- read.csv("original NASS/ale_nass-sightings_tot.csv")
 head(survey)
 str(survey)
 survey$spec <- as.factor(survey$spec)
 
-# NASS ships----
+## NASS ships----
 
 vessels <- read.csv("original NASS/nass_vessels.csv")
 
 unique(survey$vID) #TOTAL NUMBER OF VESSELS
 
 
-### Iceland map background----
+## Iceland map background----
 
 #importing world map and checking everything is alright 
 world <- map_data("world")
@@ -42,14 +43,14 @@ ice_map <- world %>%
   filter(region == "Iceland") %>% 
   dplyr::select(-subregion)
 
-### Making a map with the new csv----
+## Making a map with the new csv----
 
 n_ice_survey <- read.csv("modified NASS/north_nass_survey_prova.csv") #this is the new csv file with the broke down pods
 
 n_ice_survey$year <- as.factor(n_ice_survey$year)
 str(n_ice_survey)
 
-## Making map + lables
+## Making map + lables----
 
 (iceland1 <- ggplot() +
    geom_polygon(data = ice_map, aes(x = long, y = lat, group = group) 
@@ -74,7 +75,7 @@ str(n_ice_survey)
    labs(title = "", colour = "Survey Year") +
    coord_map())
 
-### Total sightings per year----
+## Total sightings per year----
 
 sightings_x_years <- n_ice_survey %>% group_by(year) %>% 
   summarise(total_count = n())
@@ -96,11 +97,36 @@ sightings_x_years$total_count <- as.factor(sightings_x_years$total_count)
 
 #I did this directly in qgis
 
+# TRYING CODING CLUB TUTORIAL ON SPATIAL VIS----
 
+## Loading the bathymetry data----
 
+bathymetry <- raster("parameters/bathymetry/complete_bat.tif")
 
+bathymetry #to get the properties
 
+b1 <- raster("parameters/bathymetry/complete_bat.tif", band = 1)
+b2 <- raster("parameters/bathymetry/complete_bat.tif", band = 2)
+b3 <- raster("parameters/bathymetry/complete_bat.tif", band = 3)
 
+compareRaster(b1, b2, b3) #comparing to make sure the bands are all the same
+
+plot(bathymetry)
+
+plot(b1) #this shows the same as the plot(bathymetry) because they both work on spectral band n1
+   #i don't understand why 200 which is the deepest is closest to the shore
+plot(b2) 
+plot(b3) #i think this is the money maker
+
+png("img/bat_b3.png", width = 6, height = 4, units = "in", res = 300)
+
+image(b3, col = viridis_pal(option = "D", direction = 1)(10), main = "Bathymetry of Iceland")
+
+dev.off()
+
+#OPTION = A character string indicating the colormap option to use. 
+   #Four options are available: "magma" (or "A"), "inferno" (or "B"), "plasma" (or "C"), 
+   #"viridis" (or "D", the default option) and "cividis" (or "E").
 
 
 

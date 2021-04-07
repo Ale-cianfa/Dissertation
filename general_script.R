@@ -17,14 +17,14 @@ library(sp)
 
 
 ## NASS survey----
-survey <- read.csv("original NASS/ale_nass-sightings_tot.csv")
+survey <- read.csv("Survey/original NASS/ale_nass-sightings_tot.csv")
 head(survey)
 str(survey)
 survey$spec <- as.factor(survey$spec)
 
 ## NASS ships----
 
-vessels <- read.csv("original NASS/nass_vessels.csv")
+vessels <- read.csv("Survey/original NASS/nass_vessels.csv")
 
 unique(survey$vID) #TOTAL NUMBER OF VESSELS
 
@@ -45,7 +45,7 @@ ice_map <- world %>%
 
 ## Making a map with the new csv----
 
-n_ice_survey <- read.csv("modified NASS/north_nass_survey_prova.csv") #this is the new csv file with the broke down pods
+n_ice_survey <- read.csv("Survey/modified NASS/north_nass_survey_prova.csv") #this is the new csv file with the broke down pods
 
 n_ice_survey$year <- as.factor(n_ice_survey$year)
 str(n_ice_survey)
@@ -101,13 +101,13 @@ sightings_x_years$total_count <- as.factor(sightings_x_years$total_count)
 
 ## Loading the bathymetry data----
 
-bathymetry <- raster("parameters/bathymetry/complete_bat.tif")
+bathymetry <- raster("complete_bat.tif")
 
 bathymetry #to get the properties
 
-b1 <- raster("parameters/bathymetry/complete_bat.tif", band = 1)
-b2 <- raster("parameters/bathymetry/complete_bat.tif", band = 2)
-b3 <- raster("parameters/bathymetry/complete_bat.tif", band = 3)
+b1 <- raster("complete_bat.tif", band = 1)
+b2 <- raster("complete_bat.tif", band = 2)
+b3 <- raster("complete_bat.tif", band = 3)
 
 compareRaster(b1, b2, b3) #comparing to make sure the bands are all the same
 

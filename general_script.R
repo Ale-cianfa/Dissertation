@@ -159,12 +159,12 @@ bat_df <- bat_df %>% filter(bat_1 < 0)
 
 ### Chlorophyll:
 
-chlor_0103 <- raster("Parameters/chlor_a/neodaas_chlor_a_orig_200103.tif")
-chlor_0104 <- raster("Parameters/chlor_a/neodaas_chlor_a_orig_200104.tif")
-chlor_0105 <- raster("Parameters/chlor_a/neodaas_chlor_a_orig_200105.tif")
-chlor_0106 <- raster("Parameters/chlor_a/neodaas_chlor_a_orig_200106.tif")
-chlor_0107 <- raster("Parameters/chlor_a/neodaas_chlor_a_orig_200107.tif")
-chlor_0108 <- raster("Parameters/chlor_a/neodaas_chlor_a_orig_200108.tif")
+chlor_0103 <- raster("Parameters/chlor_a/chlor_0103.tif")
+chlor_0104 <- raster("Parameters/chlor_a/chlor_0104.tif")
+chlor_0105 <- raster("Parameters/chlor_a/chlor_0105.tif")
+chlor_0106 <- raster("Parameters/chlor_a/chlor_0106.tif")
+chlor_0107 <- raster("Parameters/chlor_a/chlor_0107.tif")
+chlor_0108 <- raster("Parameters/chlor_a/chlor_0108.tif")
 
 ## Creating a data frame for each year to show the progress in a facet plot
 
@@ -179,7 +179,7 @@ chlor_0108_df <- as.data.frame(chlor_0108, xy = TRUE, na.rm = TRUE)
 ## Making the facet plot 
 
 (chlor_facet_01_03 <- ggplot() +
-   geom_raster(data = chlor_0103_df, aes(x = x, y = y, fill = neodaas_chlor_a_orig_200103)) +
+   geom_raster(data = chlor_0103_df, aes(x = x, y = y, fill = chlor_0103)) +
    scale_fill_viridis_c() +
    coord_quickmap() +
    ggtitle("Chlorophyll") +
@@ -194,7 +194,7 @@ chlor_0108_df <- as.data.frame(chlor_0108, xy = TRUE, na.rm = TRUE)
          axis.text.x = element_text(angle = 90, hjust = 1)))  # rotates x axis text
 
 (chlor_facet_01_04 <- ggplot() +
-      geom_raster(data = chlor_0104_df, aes(x = x, y = y, fill = neodaas_chlor_a_orig_200104)) +
+      geom_raster(data = chlor_0104_df, aes(x = x, y = y, fill = chlor_0104)) +
       scale_fill_viridis_c() +
       coord_quickmap() +
       ggtitle("Chlorophyll") +
@@ -208,7 +208,7 @@ chlor_0108_df <- as.data.frame(chlor_0108, xy = TRUE, na.rm = TRUE)
             axis.text.x = element_text(angle = 90, hjust = 1)))  # rotates x axis text
 
 (chlor_facet_01_05 <- ggplot() +
-      geom_raster(data = chlor_0105_df, aes(x = x, y = y, fill = neodaas_chlor_a_orig_200105)) +
+      geom_raster(data = chlor_0105_df, aes(x = x, y = y, fill = chlor_0105)) +
       scale_fill_viridis_c() +
       coord_quickmap() +
       ggtitle("Chlorophyll") +
@@ -222,7 +222,7 @@ chlor_0108_df <- as.data.frame(chlor_0108, xy = TRUE, na.rm = TRUE)
             axis.text.x = element_text(angle = 90, hjust = 1)))  # rotates x axis text
 
 (chlor_facet_01_06 <- ggplot() +
-      geom_raster(data = chlor_0106_df, aes(x = x, y = y, fill = neodaas_chlor_a_orig_200106)) +
+      geom_raster(data = chlor_0106_df, aes(x = x, y = y, fill = chlor_0106)) +
       scale_fill_viridis_c() +
       coord_quickmap() +
       ggtitle("Chlorophyll") +
@@ -237,7 +237,7 @@ chlor_0108_df <- as.data.frame(chlor_0108, xy = TRUE, na.rm = TRUE)
 
 
 (chlor_facet_01_07 <- ggplot() +
-      geom_raster(data = chlor_0107_df, aes(x = x, y = y, fill = neodaas_chlor_a_orig_200107)) +
+      geom_raster(data = chlor_0107_df, aes(x = x, y = y, fill = chlor_0107)) +
       scale_fill_viridis_c() +
       coord_quickmap() +
       ggtitle("Chlorophyll") +
@@ -251,7 +251,7 @@ chlor_0108_df <- as.data.frame(chlor_0108, xy = TRUE, na.rm = TRUE)
             axis.text.x = element_text(angle = 90, hjust = 1)))  # rotates x axis text
 
 (chlor_facet_01_08 <- ggplot() +
-      geom_raster(data = chlor_0108_df, aes(x = x, y = y, fill = neodaas_chlor_a_orig_200108)) +
+      geom_raster(data = chlor_0108_df, aes(x = x, y = y, fill = chlor_0108)) +
       scale_fill_viridis_c(direction = 1) +
       coord_quickmap() +
       ggtitle("Chlorophyll") +

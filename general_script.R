@@ -120,11 +120,11 @@ bathymetry #to get the properties
 
 plot(bathymetry)
 
-png("img/bat.png", width = 6, height = 4, units = "in", res = 300)
+#png("img/bat.png", width = 6, height = 4, units = "in", res = 300)
 
-image(bathymetry, col = viridis_pal(option = "D", direction = -1)(10), main = "Bathymetry of Iceland")
+#image(bathymetry, col = viridis_pal(option = "D", direction = -1)(10), main = "Bathymetry of Iceland")
 
-dev.off()
+#dev.off()
 
 #OPTION = A character string indicating the colormap option to use. 
 #Four options are available: "magma" (or "A"), "inferno" (or "B"), "plasma" (or "C"), 
@@ -264,13 +264,50 @@ chlor_0108_df <- as.data.frame(chlor_0108, xy = TRUE, na.rm = TRUE)
             axis.text.x = element_text(angle = 90, hjust = 1)))  # rotates x axis text
 
 ## Trying to make a facet plot 
-attach(mtcars)
+#attach(mtcars)
 
-par(mfrow = c(3, 3))
+#par(mfrow = c(3, 3))
 
 ## Survey per unit effort----
 
+# do i actually need to do this? 
 
+
+## Splitting dataset by year to process it in QGIS----
+   #I am doing this so i can work independetly on each year and then merge them together in R after saving them from qgis
+
+### 2001
+survey_01 <- survey %>% 
+   dplyr::select(year, month, spec, la2, lo2, pods) %>% 
+   filter(spec == "mn") %>% 
+   filter (year == "2001")
+
+write_csv(survey_01, file = "Survey/modified NASS/survey_01.csv")
+
+### 2007
+survey_07 <- survey %>% 
+   dplyr::select(year, month, spec, la2, lo2, pods) %>% 
+   filter(spec == "mn") %>% 
+   filter (year == "2007")
+
+write_csv(survey_07, file = "Survey/modified NASS/survey_07.csv")
+
+### 2015
+survey_15 <- survey %>% 
+   dplyr::select(year, month, spec, la2, lo2, pods) %>% 
+   filter(spec == "mn") %>% 
+   filter (year == "2015")
+
+write_csv(survey_15, file = "Survey/modified NASS/survey_15.csv")
+
+## putting together csvs from the different years----
+
+complete_01 <- read_csv("Survey/qgis_survey/2001_complete.csv")
+complete_07 <- read_csv("Survey/qgis_survey/2007_complete.csv")
+complete_15 <- read_csv("Survey/qgis_survey/2015_complete.csv")
+
+
+prova_final <- rbind(complete_01, complete_07, complete_15) #you have to make sure to save them in the right order otherwise the name do not match
 
 
 

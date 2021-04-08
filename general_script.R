@@ -15,15 +15,16 @@ library(rgdal)
 library(rasterVis)
 library(sp)
 
+getwd()
 
 ## NASS survey----
-survey <- read.csv("Survey/original NASS/ale_nass-sightings_tot.csv")
+survey <- read.csv("NASS/original/orignal_ale_nass-sightings_tot.csv")
 head(survey)
 str(survey)
 survey$spec <- as.factor(survey$spec)
 
 ### NASS ships
-vessels <- read.csv("Survey/original NASS/nass_vessels.csv")
+vessels <- read.csv("NASS/original/nass_vessels.csv")
 
 unique(survey$vID) #TOTAL NUMBER OF VESSELS
 
@@ -43,14 +44,14 @@ ice_map <- world %>%
 
 ### New CSV file (that might not be useful after all)
 
-n_ice_survey <- read.csv("Survey/modified NASS/north_nass_survey_prova.csv") #this is the new csv file with the broke down pods
+n_ice_survey <- read.csv("NASS/intermediate surveys/long_north_nass.csv") #this is the new csv file with the broke down pods
 
 n_ice_survey$year <- as.factor(n_ice_survey$year)
 str(n_ice_survey)
 
 ### Adding the effort geopackage 
 
-effort <- st_read("Survey/original NASS/ale_nass-effort.gpkg")
+effort <- st_read("NASS/ale_nass-effort.gpkg")
 
 ### Adding locations of Reykjavik and Port
 location <- c("Finnafjörður", "Reykjavík")
@@ -93,7 +94,7 @@ str(imp_locations)
 ### Total sightings per year
 
 sightings_x_years <- n_ice_survey %>% group_by(year) %>% 
-  summarise(total_count = n())
+  summarise(total_count = n()) %>% ungroup()
 
 sightings_x_years$total_count <- as.factor(sightings_x_years$total_count)
 
@@ -158,12 +159,12 @@ bat_df <- bat_df %>% filter(bat_1 < 0)
 
 ### Chlorophyll:
 
-chlor_0103 <- raster("Parameters/chlor_a/chlor_a_200103.tif")
-chlor_0104 <- raster("Parameters/chlor_a/chlor_a_200104.tif")
-chlor_0105 <- raster("Parameters/chlor_a/chlor_a_200105.tif")
-chlor_0106 <- raster("Parameters/chlor_a/chlor_a_200106.tif")
-chlor_0107 <- raster("Parameters/chlor_a/chlor_a_200107.tif")
-chlor_0108 <- raster("Parameters/chlor_a/chlor_a_200108.tif")
+chlor_0103 <- raster("Parameters/chlor_a/neodaas_chlor_a_orig_200103.tif")
+chlor_0104 <- raster("Parameters/chlor_a/neodaas_chlor_a_orig_200104.tif")
+chlor_0105 <- raster("Parameters/chlor_a/neodaas_chlor_a_orig_200105.tif")
+chlor_0106 <- raster("Parameters/chlor_a/neodaas_chlor_a_orig_200106.tif")
+chlor_0107 <- raster("Parameters/chlor_a/neodaas_chlor_a_orig_200107.tif")
+chlor_0108 <- raster("Parameters/chlor_a/neodaas_chlor_a_orig_200108.tif")
 
 ## Creating a data frame for each year to show the progress in a facet plot
 
@@ -178,7 +179,7 @@ chlor_0108_df <- as.data.frame(chlor_0108, xy = TRUE, na.rm = TRUE)
 ## Making the facet plot 
 
 (chlor_facet_01_03 <- ggplot() +
-   geom_raster(data = chlor_0103_df, aes(x = x, y = y, fill = chlor_a_200103)) +
+   geom_raster(data = chlor_0103_df, aes(x = x, y = y, fill = neodaas_chlor_a_orig_200103)) +
    scale_fill_viridis_c() +
    coord_quickmap() +
    ggtitle("Chlorophyll") +
@@ -193,7 +194,7 @@ chlor_0108_df <- as.data.frame(chlor_0108, xy = TRUE, na.rm = TRUE)
          axis.text.x = element_text(angle = 90, hjust = 1)))  # rotates x axis text
 
 (chlor_facet_01_04 <- ggplot() +
-      geom_raster(data = chlor_0104_df, aes(x = x, y = y, fill = chlor_a_200104)) +
+      geom_raster(data = chlor_0104_df, aes(x = x, y = y, fill = neodaas_chlor_a_orig_200104)) +
       scale_fill_viridis_c() +
       coord_quickmap() +
       ggtitle("Chlorophyll") +
@@ -207,7 +208,7 @@ chlor_0108_df <- as.data.frame(chlor_0108, xy = TRUE, na.rm = TRUE)
             axis.text.x = element_text(angle = 90, hjust = 1)))  # rotates x axis text
 
 (chlor_facet_01_05 <- ggplot() +
-      geom_raster(data = chlor_0105_df, aes(x = x, y = y, fill = chlor_a_200105)) +
+      geom_raster(data = chlor_0105_df, aes(x = x, y = y, fill = neodaas_chlor_a_orig_200105)) +
       scale_fill_viridis_c() +
       coord_quickmap() +
       ggtitle("Chlorophyll") +
@@ -221,7 +222,7 @@ chlor_0108_df <- as.data.frame(chlor_0108, xy = TRUE, na.rm = TRUE)
             axis.text.x = element_text(angle = 90, hjust = 1)))  # rotates x axis text
 
 (chlor_facet_01_06 <- ggplot() +
-      geom_raster(data = chlor_0106_df, aes(x = x, y = y, fill = chlor_a_200106)) +
+      geom_raster(data = chlor_0106_df, aes(x = x, y = y, fill = neodaas_chlor_a_orig_200106)) +
       scale_fill_viridis_c() +
       coord_quickmap() +
       ggtitle("Chlorophyll") +
@@ -236,7 +237,7 @@ chlor_0108_df <- as.data.frame(chlor_0108, xy = TRUE, na.rm = TRUE)
 
 
 (chlor_facet_01_07 <- ggplot() +
-      geom_raster(data = chlor_0107_df, aes(x = x, y = y, fill = chlor_a_200107)) +
+      geom_raster(data = chlor_0107_df, aes(x = x, y = y, fill = neodaas_chlor_a_orig_200107)) +
       scale_fill_viridis_c() +
       coord_quickmap() +
       ggtitle("Chlorophyll") +
@@ -250,7 +251,7 @@ chlor_0108_df <- as.data.frame(chlor_0108, xy = TRUE, na.rm = TRUE)
             axis.text.x = element_text(angle = 90, hjust = 1)))  # rotates x axis text
 
 (chlor_facet_01_08 <- ggplot() +
-      geom_raster(data = chlor_0108_df, aes(x = x, y = y, fill = chlor_a_200108)) +
+      geom_raster(data = chlor_0108_df, aes(x = x, y = y, fill = neodaas_chlor_a_orig_200108)) +
       scale_fill_viridis_c(direction = 1) +
       coord_quickmap() +
       ggtitle("Chlorophyll") +
@@ -282,7 +283,7 @@ survey_01 <- survey %>%
    filter(spec == "mn") %>% 
    filter (year == "2001")
 
-write_csv(survey_01, file = "Survey/modified NASS/survey_01.csv")
+write_csv(survey_01, file = "NASS/intermediate surveys/by_year/survey_01.csv")
 
 ### 2007
 survey_07 <- survey %>% 
@@ -290,7 +291,7 @@ survey_07 <- survey %>%
    filter(spec == "mn") %>% 
    filter (year == "2007")
 
-write_csv(survey_07, file = "Survey/modified NASS/survey_07.csv")
+write_csv(survey_07, file = "NASS/intermediate surveys/by_year/survey_07.csv")
 
 ### 2015
 survey_15 <- survey %>% 
@@ -298,15 +299,15 @@ survey_15 <- survey %>%
    filter(spec == "mn") %>% 
    filter (year == "2015")
 
-write_csv(survey_15, file = "Survey/modified NASS/survey_15.csv")
+write_csv(survey_15, file = "NASS/intermediate surveys/by_year/survey_15.csv")
 
 ## Putting together csvs from the different years----
-complete_01 <- read_csv("Survey/qgis_survey/2001_complete.csv")
-complete_07 <- read_csv("Survey/qgis_survey/2007_complete.csv")
-complete_15 <- read_csv("Survey/qgis_survey/2015_complete.csv")
+complete_01 <- read_csv("NASS/qgis_survey/2001_complete.csv")
+complete_07 <- read_csv("NASS/qgis_survey/2007_complete.csv")
+complete_15 <- read_csv("NASS/qgis_survey/2015_complete.csv")
 
-#Working on dataset 2001
-complete_01
+## Working on dataset 2001
+
 
 #prova_final <- rbind(complete_01, complete_07, complete_15) #you have to make sure to save them in the right order otherwise the name do not match
 

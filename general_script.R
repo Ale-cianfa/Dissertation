@@ -300,14 +300,15 @@ survey_15 <- survey %>%
 
 write_csv(survey_15, file = "Survey/modified NASS/survey_15.csv")
 
-## putting together csvs from the different years----
-
+## Putting together csvs from the different years----
 complete_01 <- read_csv("Survey/qgis_survey/2001_complete.csv")
 complete_07 <- read_csv("Survey/qgis_survey/2007_complete.csv")
 complete_15 <- read_csv("Survey/qgis_survey/2015_complete.csv")
 
+#Working on dataset 2001
+complete_01
 
-prova_final <- rbind(complete_01, complete_07, complete_15) #you have to make sure to save them in the right order otherwise the name do not match
+#prova_final <- rbind(complete_01, complete_07, complete_15) #you have to make sure to save them in the right order otherwise the name do not match
 
 
 

@@ -1,0 +1,21 @@
+### COPERNICUS, mixed layer depth (mlotst)
+- Unit: metres
+- CRS: WGS84 (epsg 4326)
+- lon: -46, 3
+- lat: 50, 75
+- cell size: 0.0833358764648438 degrees (~1/12)
+- Source: https://resources.marine.copernicus.eu/?option=com_csw&view=details&product_id=GLOBAL_REANALYSIS_PHY_001_030
+
+### NEODAAS, chlorophyll a
+- Unit: mg m-3
+- CRS: WGS84 (epsg 4326)
+- lon: -46, 3
+- lat: 50, 75
+- cell size: 1/12
+
+### NEODAAS, sst
+- Unit: kelvin
+- CRS: WGS84 (epsg 4326)
+- lon: -46, 3
+- lat: 50, 75
+- cell size: 1/12

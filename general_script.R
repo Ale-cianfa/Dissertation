@@ -1,6 +1,6 @@
 # R SCRIPT FOR DATA ANALYSIS OF ENVIRONMENTAL VARIABLES
 
-## PACKAGES----
+## Packages----
 
 library(tidyverse)
 library(ggplot2)
@@ -22,16 +22,14 @@ head(survey)
 str(survey)
 survey$spec <- as.factor(survey$spec)
 
-## NASS ships----
-
+### NASS ships
 vessels <- read.csv("Survey/original NASS/nass_vessels.csv")
 
 unique(survey$vID) #TOTAL NUMBER OF VESSELS
 
+## Iceland map----
 
-## Iceland map background----
-
-#importing world map and checking everything is alright 
+### Importing world map and checking everything is alright 
 world <- map_data("world")
 head(world)
 unique(world$region)
@@ -43,20 +41,35 @@ ice_map <- world %>%
   filter(region == "Iceland") %>% 
   dplyr::select(-subregion)
 
-## Making a map with the new csv----
+### New CSV file (that might not be useful after all)
 
 n_ice_survey <- read.csv("Survey/modified NASS/north_nass_survey_prova.csv") #this is the new csv file with the broke down pods
 
 n_ice_survey$year <- as.factor(n_ice_survey$year)
 str(n_ice_survey)
 
-## Making map + lables----
+### Adding the effort geopackage 
 
-(iceland1 <- ggplot() +
+effort <- st_read("Survey/original NASS/ale_nass-effort.gpkg")
+
+### Adding locations of Reykjavik and Port
+location <- c("Finnafjörður", "Reykjavík")
+lat <- c(66.116667, 64.144555)
+long <- c(-15.133333, -21.941021)
+group <- as.factor(c("a", "b"))
+
+imp_locations <- data.frame(location, lat, long, group)
+head(imp_locations)
+str(imp_locations)
+
+### Making map + lables
+
+(site_map <- ggplot() +
    geom_polygon(data = ice_map, aes(x = long, y = lat, group = group) 
                 , color = "black", fill = "#698B69", alpha = 0.6, size = 0.3) + #plot the data points on the map
    geom_point(data = imp_locations, aes(x = long, y = lat, colour = group), 
               colour = c("#0E4749", "#CC978E"), size = 3) +
+   geom_sf(data = effort, color = "black", alpha = 0.6) + # effort
    geom_point(data = n_ice_survey, aes(x = lo2, y = la2, colour = year)) + #adding pod sixe ad a point size, not sure is useful, just an idea
    #scale_color_manual(values = c("#70161E", "#F6BE13", "#5C80BC")) +
    scale_color_manual(values = c("#A06B9A", "#8D9EC6", "#082241")) +
@@ -73,9 +86,11 @@ str(n_ice_survey)
    ylim(62,68) +
    xlim(-27, -10) +
    labs(title = "", colour = "Survey Year") +
-   coord_map())
+   coord_sf())
 
-## Total sightings per year----
+#ggsave(site_map, file = "img/survey_final.png", height = 5, width = 8)
+
+### Total sightings per year
 
 sightings_x_years <- n_ice_survey %>% group_by(year) %>% 
   summarise(total_count = n())
@@ -93,42 +108,167 @@ sightings_x_years$total_count <- as.factor(sightings_x_years$total_count)
          y ="Total Sightings"))
 #ggsave(sightings_x_years_plot, file = "img/sightings_x_years.png", height = 5, width = 9)
 
-## Making csv into a shapefile for qgis----
+## Visualizing raster data----
 
-#I did this directly in qgis
+### Bathymetry:
 
-# TRYING CODING CLUB TUTORIAL ON SPATIAL VIS----
+bathymetry <- raster("Parameters/bathymetry/bat_1.tif")
 
-## Loading the bathymetry data----
-
-bathymetry <- raster("complete_bat.tif")
+bat_TID <- raster("Parameters/bathymetry/bat_2_TID.tif")
 
 bathymetry #to get the properties
 
-b1 <- raster("complete_bat.tif", band = 1)
-b2 <- raster("complete_bat.tif", band = 2)
-b3 <- raster("complete_bat.tif", band = 3)
-
-compareRaster(b1, b2, b3) #comparing to make sure the bands are all the same
-
 plot(bathymetry)
 
-plot(b1) #this shows the same as the plot(bathymetry) because they both work on spectral band n1
-   #i don't understand why 200 which is the deepest is closest to the shore
-plot(b2) 
-plot(b3) #i think this is the money maker
+png("img/bat.png", width = 6, height = 4, units = "in", res = 300)
 
-png("img/bat_b3.png", width = 6, height = 4, units = "in", res = 300)
-
-image(b3, col = viridis_pal(option = "D", direction = 1)(10), main = "Bathymetry of Iceland")
+image(bathymetry, col = viridis_pal(option = "D", direction = -1)(10), main = "Bathymetry of Iceland")
 
 dev.off()
 
 #OPTION = A character string indicating the colormap option to use. 
-   #Four options are available: "magma" (or "A"), "inferno" (or "B"), "plasma" (or "C"), 
-   #"viridis" (or "D", the default option) and "cividis" (or "E").
+#Four options are available: "magma" (or "A"), "inferno" (or "B"), "plasma" (or "C"), 
+#"viridis" (or "D", the default option) and "cividis" (or "E").
+
+## plotting bathymetry with ggplot 
+
+bat_df <- as.data.frame(bathymetry, xy = TRUE, na.rm = TRUE)
+
+bat_df <- bat_df %>% filter(bat_1 < 0)
+
+(bat_plot <- ggplot() +
+      geom_raster(data = bat_df, aes(x = x, y = y, fill = bat_1)) +
+      scale_fill_viridis_c() +
+      coord_quickmap() +
+      ggtitle("North of Iceland Bathymetric profile") +
+      ylim(64.5,68) +
+      xlim(-27, -10) +
+      theme_classic() +
+      theme(legend.position = "right",
+            legend.title = element_text(size = 13, face ="bold"),
+            legend.text = element_text(size = 12)) + # removes defalut grey background
+      theme(plot.title = element_text(size = 15, face ="bold", hjust = 0.5),             # centres plot title
+            text = element_text(size=20),		       	    # font size
+            axis.text.x = element_text(angle = 90, hjust = 1)) +
+      labs(fill = "Depth (m)", 
+           x = "longitude", 
+           y ="latitude")) # rotates x axis text
+
+#ggsave(bat_plot, file = "img/bat_plot.png", height = 5, width = 9)
+
+### Chlorophyll:
+
+chlor_0103 <- raster("Parameters/chlor_a/chlor_a_200103.tif")
+chlor_0104 <- raster("Parameters/chlor_a/chlor_a_200104.tif")
+chlor_0105 <- raster("Parameters/chlor_a/chlor_a_200105.tif")
+chlor_0106 <- raster("Parameters/chlor_a/chlor_a_200106.tif")
+chlor_0107 <- raster("Parameters/chlor_a/chlor_a_200107.tif")
+chlor_0108 <- raster("Parameters/chlor_a/chlor_a_200108.tif")
+
+## Creating a data frame for each year to show the progress in a facet plot
+
+chlor_0103_df <- as.data.frame(chlor_0103, xy = TRUE, na.rm = TRUE)
+chlor_0104_df <- as.data.frame(chlor_0104, xy = TRUE, na.rm = TRUE)
+chlor_0105_df <- as.data.frame(chlor_0105, xy = TRUE, na.rm = TRUE)
+chlor_0106_df <- as.data.frame(chlor_0106, xy = TRUE, na.rm = TRUE)
+chlor_0107_df <- as.data.frame(chlor_0107, xy = TRUE, na.rm = TRUE)
+chlor_0108_df <- as.data.frame(chlor_0108, xy = TRUE, na.rm = TRUE)
 
 
+## Making the facet plot 
+
+(chlor_facet_01_03 <- ggplot() +
+   geom_raster(data = chlor_0103_df, aes(x = x, y = y, fill = chlor_a_200103)) +
+   scale_fill_viridis_c() +
+   coord_quickmap() +
+   ggtitle("Chlorophyll") +
+   
+   xlab("Longitude") +
+   ylab("Latitude") +
+   ylim(62,68) +
+   xlim(-27, -10) +
+   theme_classic() +   					    # removes defalut grey background
+   theme(plot.title = element_text(hjust = 0.5),             # centres plot title
+         text = element_text(size=20),		       	    # font size
+         axis.text.x = element_text(angle = 90, hjust = 1)))  # rotates x axis text
+
+(chlor_facet_01_04 <- ggplot() +
+      geom_raster(data = chlor_0104_df, aes(x = x, y = y, fill = chlor_a_200104)) +
+      scale_fill_viridis_c() +
+      coord_quickmap() +
+      ggtitle("Chlorophyll") +
+      xlab("Longitude") +
+      ylab("Latitude") +
+      ylim(62,68) +
+      xlim(-27, -10) +
+      theme_classic() +   					    # removes defalut grey background
+      theme(plot.title = element_text(hjust = 0.5),             # centres plot title
+            text = element_text(size=20),		       	    # font size
+            axis.text.x = element_text(angle = 90, hjust = 1)))  # rotates x axis text
+
+(chlor_facet_01_05 <- ggplot() +
+      geom_raster(data = chlor_0105_df, aes(x = x, y = y, fill = chlor_a_200105)) +
+      scale_fill_viridis_c() +
+      coord_quickmap() +
+      ggtitle("Chlorophyll") +
+      xlab("Longitude") +
+      ylab("Latitude") +
+      ylim(62,68) +
+      xlim(-27, -10) +
+      theme_classic() +   					    # removes defalut grey background
+      theme(plot.title = element_text(hjust = 0.5),             # centres plot title
+            text = element_text(size=20),		       	    # font size
+            axis.text.x = element_text(angle = 90, hjust = 1)))  # rotates x axis text
+
+(chlor_facet_01_06 <- ggplot() +
+      geom_raster(data = chlor_0106_df, aes(x = x, y = y, fill = chlor_a_200106)) +
+      scale_fill_viridis_c() +
+      coord_quickmap() +
+      ggtitle("Chlorophyll") +
+      xlab("Longitude") +
+      ylab("Latitude") +
+      ylim(62,68) +
+      xlim(-27, -10) +
+      theme_classic() +   					    # removes defalut grey background
+      theme(plot.title = element_text(hjust = 0.5),             # centres plot title
+            text = element_text(size=20),		       	    # font size
+            axis.text.x = element_text(angle = 90, hjust = 1)))  # rotates x axis text
+
+
+(chlor_facet_01_07 <- ggplot() +
+      geom_raster(data = chlor_0107_df, aes(x = x, y = y, fill = chlor_a_200107)) +
+      scale_fill_viridis_c() +
+      coord_quickmap() +
+      ggtitle("Chlorophyll") +
+      xlab("Longitude") +
+      ylab("Latitude") +
+      ylim(62,68) +
+      xlim(-27, -10) +
+      theme_classic() +   					    # removes defalut grey background
+      theme(plot.title = element_text(hjust = 0.5),             # centres plot title
+            text = element_text(size=20),		       	    # font size
+            axis.text.x = element_text(angle = 90, hjust = 1)))  # rotates x axis text
+
+(chlor_facet_01_08 <- ggplot() +
+      geom_raster(data = chlor_0108_df, aes(x = x, y = y, fill = chlor_a_200108)) +
+      scale_fill_viridis_c(direction = 1) +
+      coord_quickmap() +
+      ggtitle("Chlorophyll") +
+      xlab("Longitude") +
+      ylab("Latitude") +
+      ylim(62,68) +
+      xlim(-27, -10) +
+      theme_classic() +   					    # removes defalut grey background
+      theme(plot.title = element_text(hjust = 0.5),             # centres plot title
+            text = element_text(size=20),		       	    # font size
+            axis.text.x = element_text(angle = 90, hjust = 1)))  # rotates x axis text
+
+## Trying to make a facet plot 
+attach(mtcars)
+
+par(mfrow = c(3, 3))
+
+## Survey per unit effort----
 
 
 

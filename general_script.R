@@ -16,6 +16,8 @@ library(rgdal)
 library(rasterVis)
 library(sp)
 library(mgcv)
+library(RColorBrewer)
+library(gam)
 
 getwd()
 
@@ -135,13 +137,16 @@ plot(bathymetry)
 
 ## plotting bathymetry with ggplot 
 
+display.brewer.all()
+
 bat_df <- as.data.frame(bathymetry, xy = TRUE, na.rm = TRUE)
 
 bat_df <- bat_df %>% filter(bat_1 < 0)
 
 (bat_plot <- ggplot() +
       geom_raster(data = bat_df, aes(x = x, y = y, fill = bat_1)) +
-      scale_fill_viridis_c() +
+      #scale_fill_viridis_c() +
+      scale_color_brewer(palette = "BuPu") +
       coord_quickmap() +
       ggtitle("North of Iceland Bathymetric profile") +
       ylim(64.5,68) +
@@ -157,7 +162,7 @@ bat_df <- bat_df %>% filter(bat_1 < 0)
            x = "longitude", 
            y ="latitude")) # rotates x axis text
 
-#ggsave(bat_plot, file = "img/bat_plot.png", height = 5, width = 9)
+ggsave(bat_plot, file = "img/bat_plot3.png", height = 5, width = 9)
 
 ### Chlorophyll:
 
@@ -366,6 +371,10 @@ b1 <- mgcv::gam(y ~ s(x1, bs='ps', sp=0.6) + s(x2, bs='ps', sp=0.6) + x3, data =
 summary(b1)
 plot(b1)
 
+#basically what i need is a y, which could be, in theory, just a column called sightings with a 1 next to it
+   #maybe i could use pod size (similar to what they do in the books)
+   #basically is the presence of something and how that realtes to specific environmental variables 
+
 # plot the smooth predictor function for x1 with ggplot to get a nicer looking graph
 p <- predict(b1, type="lpmatrix")
 beta <- coef(b1)[grepl("x1", names(coef(b1)))]
@@ -383,9 +392,26 @@ b2 <- mgcv::gam(y ~ s(x1, bs='ps') + s(x2, bs='ps') + x3, data = dat, method="RE
 b3 <- mgcv::gam(y ~ s(x0) + s(x1) + s(x2) + s(x3) , data = dat, method="REML", select=TRUE)
 
 # loess smoothers with the gam package (restart R before loading gam)
-library(gam)
 b4 <- gam::gam(y ~ lo(x1, span=0.6) + lo(x2, span=0.6) + x3, data = dat)
 summary(b4)
+
+
+## Effective Strip Width (ESW) for sightings----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

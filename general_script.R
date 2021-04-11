@@ -103,19 +103,21 @@ sightings_x_years <- n_ice_survey %>% group_by(year) %>%
 sightings_x_years$total_count <- as.factor(sightings_x_years$total_count)
 
 (sightings_x_years_plot <- ggplot(sightings_x_years, aes(x = year, y = total_count, fill = total_count)) + #specifying what to put on the axis
-    geom_bar(stat = "identity") + 
+    geom_bar(color = "black", size = 0.2, stat = "identity", width = 0.75) + 
     scale_fill_manual(values = c("#8D9EC6","#082241", "#A06B9A")) +    theme_minimal() + 
+    theme_minimal() +
     theme(legend.position = "none",
-          legend.title = element_text(size = 13, face ="bold"),
-          legend.text = element_text(size = 12)) +
+          text = element_text(size = 15),		       	    # font size
+   axis.text.x = element_text(hjust = 1)) +
     labs(fill = "Total Sightings", 
          x = "Years", 
          y ="Total Sightings"))
+
 #ggsave(sightings_x_years_plot, file = "img/sightings_x_years.png", height = 5, width = 9)
 
 ## Visualizing raster data----
 
-### Bathymetry:
+### Bathymetry-----
 
 bathymetry <- raster("Parameters/bathymetry/bat_1.tif")
 
@@ -139,31 +141,48 @@ plot(bathymetry)
 
 display.brewer.all()
 
-#bat_df <- as.data.frame(bathymetry, xy = TRUE, na.rm = TRUE)
+bat_df <- as.data.frame(bathymetry, xy = TRUE, na.rm = TRUE)
 
-#bat_df <- bat_df %>% filter(bat_1 < 0)
+bat_df <- bat_df %>% filter(bat_1 < 0)
 
-#(bat_plot <- ggplot() +
-      #geom_raster(data = bat_df, aes(x = x, y = y, fill = bat_1)) +
-#      scale_fill_viridis_c() +
-#     coord_quickmap() +
-#     ggtitle("Bathymetric profile of the North of Iceland") +
-#      ylim(64.5,68) +
-#      xlim(-27, -10) +
-#      theme_classic() +
-#      theme(legend.position = "right",
-#            legend.title = element_text(size = 13, face ="bold"),
-#             legend.text = element_text(size = 12)) + # removes defalut grey background
-#      theme(plot.title = element_text(size = 15, face ="bold", hjust = 0.5),             # centres plot title
-#            text = element_text(size=20),		       	    # font size
-#            axis.text.x = element_text(angle = 90, hjust = 1)) +
-#      labs(fill = "Depth (m)", 
-#           x = "Longitude", 
-#           y ="Latitude")) # rotates x axis text
+(bat_plot <- ggplot() +
+      geom_raster(data = bat_df, aes(x = x, y = y, fill = bat_1)) +
+      scale_fill_viridis_c() +
+     coord_quickmap() +
+     ggtitle("Bathymetric profile of the North of Iceland") +
+      ylim(64.5,68.5) +
+      xlim(-27, -10) +
+      theme_classic() +
+      theme(legend.position = "right",
+            legend.title = element_text(size = 13, face ="bold"),
+           legend.text = element_text(size = 12)) + # removes defalut grey background
+     theme(plot.title = element_text(size = 15, face ="bold", hjust = 0.5),             # centres plot title
+     text = element_text(size=15),		       	    # font size
+     axis.text.x = element_text(angle = 90, hjust = 1)) +
+    labs(fill = "Depth (m)", 
+     x = "Longitude", 
+     y ="Latitude")) # rotates x axis text
 
-#ggsave(bat_plot, file = "img/bat_plot4.png", height = 5, width = 9)
+ggsave(bat_plot, file = "img/bat_plot4.png", height = 5, width = 9)
 
-### Chlorophyll:
+## Bathymetry distribution hinstogram----
+
+(bat_dist <- ggplot()+
+      geom_histogram(data = bat_df, fill = "#006d77",
+                   color = "black", size = 0.2, 
+                   alpha = 0.7, bins = 35, aes(x = bat_1)) +
+      scale_x_reverse() +
+      theme_classic() +
+      theme(text = element_text(size = 15),		       	    # font size
+          axis.text.x = element_text(hjust = 1)) +
+      labs(fill = "Bathymetry profile", 
+         x = "Depth (m)", 
+         y ="Count")) 
+
+#ggsave(bat_dist, file = "img/bat_prof.png", height = 5, width = 9)
+
+    
+### Chlorophyll----
 
 chlor_0107 <- raster("Parameters/chlor_a/chlor_0107.tif")
 
@@ -178,13 +197,13 @@ chlor_0107_df <- as.data.frame(chlor_0107, xy = TRUE, na.rm = TRUE)
       scale_fill_viridis_c()+
       coord_quickmap() +
       ggtitle("Chlorophyll map of Northern Iceland, July 2001") +
-      ylim(64.5,68) +
+      ylim(64.5,68.5) +
       xlim(-27, -10) +
       theme_classic() + # removes defalut grey background
    theme(legend.position = "right",
          legend.title = element_text(size = 13, face ="bold"),
          legend.text = element_text(size = 12)) + # removes defalut grey background
-         theme(plot.title = element_text(size = 15, face ="bold", hjust = 0.5),             # centres plot title
+         theme(plot.title = element_text(size = 15, face ="bold", hjust = 0.5), # centres plot title
          text = element_text(size=12),		# font size
          axis.text.x = element_text(angle = 90, hjust = 1)) +      
       labs(fill = "Chlorophyll-a \n(mg m-3)", 
@@ -212,7 +231,6 @@ chlor_1507_df <- as.data.frame(chlor_1507, xy = TRUE, na.rm = TRUE)
       theme(plot.title = element_text(hjust = 0.5),             # centres plot title
             text = element_text(size=20),		       	    # font size
             axis.text.x = element_text(angle = 90, hjust = 1)))  # rotates x axis text
-
 
 
 ## Trying to make a facet plot 
@@ -301,8 +319,7 @@ complete_15 <- complete_15 %>%
 
 ## Binding the data sets per year----
 
-prova_final <- rbind(complete_01, complete_07, complete_15) #you have to make sure to save them in the right order otherwise the name do not match
-
+prova_df <- rbind(complete_01, complete_07, complete_15) #you have to make sure to save them in the right order otherwise the name do not match
 
 ## Effective Strip Width (ESW) for sightings----
 

@@ -214,23 +214,58 @@ chlor_0107_df <- as.data.frame(chlor_0107, xy = TRUE, na.rm = TRUE)
 
 #ggsave(chlor_01_07, file = "img/chlor_ex.png", height = 5, width = 9)
 
-chlor_1507 <- raster("Parameters/chlor_a/chlor_1507.tif")
+## Sea Surface Temperature----
 
-chlor_1507_df <- as.data.frame(chlor_1507, xy = TRUE, na.rm = TRUE)
+sst_0107 <- raster("Parameters/analysed_sst/sst_0107.tif")
 
-(chlor_15_07 <- ggplot() +
-      geom_raster(data = chlor_1507_df, aes(x = x, y = y, fill = chlor_1507)) +
-      scale_fill_viridis_c()+
+sst_0107_df <- as.data.frame(sst_0107, xy = TRUE, na.rm = TRUE)
+
+(sst_01_07 <- ggplot() +
+      geom_raster(data = sst_0107_df, aes(x = x, y = y, fill = sst_0107)) +
+      scale_fill_viridis_c(option = "plasma", direction = -1)+
       coord_quickmap() +
-      ggtitle("Chlorophyll map of Northern Iceland, July 2015") +
-      xlab("Longitude") +
-      ylab("Latitude") +
-      ylim(64.5,68) +
+      ggtitle("SST map of Northern Iceland, July 2001") +
+      ylim(64.5,68.5) +
       xlim(-27, -10) +
-      theme_classic() +   					    # removes defalut grey background
-      theme(plot.title = element_text(hjust = 0.5),             # centres plot title
-            text = element_text(size=20),		       	    # font size
-            axis.text.x = element_text(angle = 90, hjust = 1)))  # rotates x axis text
+      theme_classic() + # removes defalut grey background
+      theme(legend.position = "right",
+            legend.title = element_text(size = 13, face ="bold"),
+            legend.text = element_text(size = 12)) + # removes defalut grey background
+      theme(plot.title = element_text(size = 15, face ="bold", hjust = 0.5), # centres plot title
+            text = element_text(size=12),		# font size
+            axis.text.x = element_text(angle = 90, hjust = 1)) +      
+      labs(fill = "Temperature (K)", 
+           x = "Longitude", 
+           y = "Latitude"))
+
+#ggsave(sst_01_07, file = "img/sst_ex.png", height = 5, width = 9)
+
+## MLD----
+
+mld_0107 <- raster("Parameters/mlotst/mlotst_0107.tif")
+
+mld_0107_df <- as.data.frame(mld_0107, xy = TRUE, na.rm = TRUE)
+
+(mld_01_07 <- ggplot() +
+      geom_raster(data = mld_0107_df, aes(x = x, y = y, fill = mlotst_0107)) +
+      scale_fill_viridis_c(direction = 1)+
+      coord_quickmap() +
+      ggtitle("MLD in Northern Iceland, July 2001") +
+      ylim(64.5,68.5) +
+      xlim(-27, -10) +
+      theme_classic() + # removes defalut grey background
+      theme(legend.position = "right",
+            legend.title = element_text(size = 13, face ="bold"),
+            legend.text = element_text(size = 12)) + # removes defalut grey background
+      theme(plot.title = element_text(size = 15, face ="bold", hjust = 0.5), # centres plot title
+            text = element_text(size=12),		# font size
+            axis.text.x = element_text(angle = 90, hjust = 1)) +      
+      labs(fill = "Depth (m)", 
+           x = "Longitude", 
+           y = "Latitude"))
+
+#ggsave(mld_01_07, file = "img/mld_ex.png", height = 5, width = 9)
+
 
 
 ## Trying to make a facet plot 

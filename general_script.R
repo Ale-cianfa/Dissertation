@@ -21,6 +21,18 @@ library(gam)
 
 getwd()
 
+## Graphic theme----
+
+graphic_theme <- function(){
+   theme_minimal() + 
+      theme(legend.position = "right",
+            legend.title = element_text(size = 13, face ="bold"),
+            legend.text = element_text(size = 12),
+            text = element_text(size = 15),
+            plot.title = element_text(size = 16, face ="bold", hjust = 0.5),
+            axis.text.x = element_text(hjust = 1))
+}
+
 ## NASS SURVEY----
 survey <- read.csv("NASS/original/orignal_ale_nass-sightings_tot.csv")
 head(survey)
@@ -67,7 +79,7 @@ imp_locations <- data.frame(location, lat, long, group)
 head(imp_locations)
 str(imp_locations)
 
-### Making map + lables
+### Making map + lables----
 
 (site_map <- ggplot() +
    geom_polygon(data = ice_map, aes(x = long, y = lat, group = group) 
@@ -80,17 +92,15 @@ str(imp_locations)
    scale_color_manual(values = c("#A06B9A", "#8D9EC6", "#082241")) +
    #geom_rect(data = ice_map, aes(xmin = 65, xmax = 68, ymin = -9, ymax = -20),
    #fill = "transparent", color = "red", size = 0.5) + 
-   theme_minimal() + 
-   theme(legend.position = "right",
-         legend.title = element_text(size = 13, face ="bold"),
-         legend.text = element_text(size = 12)) +
+   graphic_theme() +
    geom_label_repel(data = imp_locations, aes(x = long, y = lat,
                                               label = location),
                     box.padding = 5, size = 5, alpha = 0.9, nudge_y = -0.5,
                     min.segment.length = 0, inherit.aes = FALSE) + 
    ylim(62,68) +
    xlim(-27, -10) +
-   labs(title = "", colour = "Survey Year") +
+   labs(title = "", colour = "Survey Year", 
+        x = "Longitude", y = "Latitude") + 
    coord_sf())
 
 #ggsave(site_map, file = "img/survey_final.png", height = 5, width = 8)
@@ -103,17 +113,15 @@ sightings_x_years <- n_ice_survey %>% group_by(year) %>%
 sightings_x_years$total_count <- as.factor(sightings_x_years$total_count)
 
 (sightings_x_years_plot <- ggplot(sightings_x_years, aes(x = year, y = total_count, fill = total_count)) + #specifying what to put on the axis
-    geom_bar(color = "black", size = 0.2, stat = "identity", width = 0.75) + 
+    geom_bar(color = "black", size = 0.2, stat = "identity", width = 0.6) + 
     scale_fill_manual(values = c("#8D9EC6","#082241", "#A06B9A")) +    theme_minimal() + 
-    theme_minimal() +
-    theme(legend.position = "none",
-          text = element_text(size = 15),		       	    # font size
-   axis.text.x = element_text(hjust = 1)) +
+    graphic_theme() +
+    theme(legend.position = "none") +
     labs(fill = "Total Sightings", 
          x = "Years", 
          y ="Total Sightings"))
 
-#ggsave(sightings_x_years_plot, file = "img/sightings_x_years.png", height = 5, width = 9)
+#ggsave(sightings_x_years_plot, file = "img/sightings_x_years.png", height = 5, width = 4.5)
 
 ## Visualizing raster data----
 
@@ -147,23 +155,24 @@ bat_df <- bat_df %>% filter(bat_1 < 0)
 
 (bat_plot <- ggplot() +
       geom_raster(data = bat_df, aes(x = x, y = y, fill = bat_1)) +
+      geom_contour(aes(z = Chla), binwidth = 2, colour = "red", alpha = 0.2) +
+      geom_contour(aes(z = Chla), breaks = 0.1, colour = "darkgrey") +
+      geom_contour(aes(z = Chla), breaks = 0.2, colour = "darkgrey") +
+      geom_contour(aes(z = Chla), breaks = 0.3, colour = "black") +
       scale_fill_viridis_c() +
      coord_quickmap() +
      ggtitle("Bathymetric profile of the North of Iceland") +
       ylim(64.5,68.5) +
       xlim(-27, -10) +
+      graphic_theme() +
       theme_classic() +
-      theme(legend.position = "right",
-            legend.title = element_text(size = 13, face ="bold"),
-           legend.text = element_text(size = 12)) + # removes defalut grey background
-     theme(plot.title = element_text(size = 15, face ="bold", hjust = 0.5),             # centres plot title
-     text = element_text(size=15),		       	    # font size
-     axis.text.x = element_text(angle = 90, hjust = 1)) +
+      theme (plot.title = element_text(size = 15, 
+                                       face ="bold", hjust = 0.5)) +
     labs(fill = "Depth (m)", 
      x = "Longitude", 
      y ="Latitude")) # rotates x axis text
 
-ggsave(bat_plot, file = "img/bat_plot4.png", height = 5, width = 9)
+#ggsave(bat_plot, file = "img/bat_plot4.png", height = 5, width = 9)
 
 ## Bathymetry distribution hinstogram----
 
@@ -172,14 +181,14 @@ ggsave(bat_plot, file = "img/bat_plot4.png", height = 5, width = 9)
                    color = "black", size = 0.2, 
                    alpha = 0.7, bins = 35, aes(x = bat_1)) +
       scale_x_reverse() +
-      theme_classic() +
+      theme_minimal() +
       theme(text = element_text(size = 15),		       	    # font size
           axis.text.x = element_text(hjust = 1)) +
       labs(fill = "Bathymetry profile", 
          x = "Depth (m)", 
          y ="Count")) 
 
-#ggsave(bat_dist, file = "img/bat_prof.png", height = 5, width = 9)
+ggsave(bat_dist, file = "img/bat_prof.png", height = 5, width = 9)
 
     
 ### Chlorophyll----

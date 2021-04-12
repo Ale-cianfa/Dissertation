@@ -141,17 +141,24 @@ prova_df <- rbind(complete_01, complete_07, complete_15) #you have to make sure 
 
 prova_df <- prova_df %>% mutate(presence = "1")
 
-str(prova_df)
+write.csv(prova_df,file = "Parameters/prova_complete_df.csv" )
 
-prova_df$presence <- as.factor(prova_df$presence)
+str(prova_df$presence)
 
-p1 <- mgcv::gam(pods ~ s(chlorJuly, bs='ps', sp=0.6), data = prova_df)+
+prova_df$presence <- as.numeric(prova_df$presence)
+
+p1 <- mgcv::gam(pods ~ s(bat1, bs='ps', sp=0.5),data = prova_df)
+
+b3 <- mgcv::gam(pods ~ s(chlorJuly) + s(sstJuly), data = prova_df, method="REML", select=TRUE)
 
 ## do i need to have presence/absence? no because I don't have that 
+## can i just use pods? can i just add it again as a random effect
 
-#summary(p1)
+summary(b3)
 
-plot(p1)
+plot(b3)
+
+AIC(b3)
 
 ## Effective Strip Width (ESW) for sightings----
 

@@ -27,7 +27,7 @@ setwd("/home/s1857169/scratch/r-density-whale/") # for xrdp linux
  
 # Set parameters, CHANGE!
 
-# ALBERS
+# ALBERS Projection
 albers.crs <- "+proj=aea +x_0=0 +y_0=0 +lon_0=-30 +lat_0=30 +lat_1=43 +lat_2=62 +units=m +ellps=WGS84 +datum=WGS84 +no_defs"
 e.min <- -1250000
 e.max <- 2375000

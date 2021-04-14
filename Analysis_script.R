@@ -97,7 +97,7 @@ comp_2007 <- comp_2007 %>%
 
 
 ### 2015:
-comp_2015 <- read.csv("final_df/by_year/2015_final_df.csv")
+comp_2015 <- read.csv("final_df/by_year/2015_final_df2.csv") #MISSING LAT LONG!!
 
 str(comp_2015)
 
@@ -116,9 +116,22 @@ comp_2015 <- comp_2015 %>%
 
 ### 2001: 
 
+colnames(comp_2001) #printing out the column names
+
 ### 2007: 
 
+colnames(comp_2007)
+
 ### 2015: 
+
+colnames(comp_2015) 
+
+### notes on how to change the order: 
+
+col_order <- c("Species", "Petal.Width", "Sepal.Length",
+               "Sepal.Width", "Petal.Length")
+my_data2 <- my_data[, col_order]
+my_data2
 
 
 

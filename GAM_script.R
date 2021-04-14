@@ -141,7 +141,7 @@ prova_df <- rbind(complete_01, complete_07, complete_15) #you have to make sure 
 
 prova_df <- prova_df %>% mutate(presence = "1")
 
-write.csv(prova_df,file = "Parameters/prova_complete_df.csv" )
+#write.csv(prova_df,file = "Parameters/prova_complete_df.csv" )
 
 str(prova_df$presence)
 

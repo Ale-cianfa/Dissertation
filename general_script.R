@@ -65,6 +65,15 @@ n_ice_survey <- read.csv("NASS/intermediate surveys/long_north_nass.csv") #this 
 n_ice_survey$year <- as.factor(n_ice_survey$year)
 str(n_ice_survey)
 
+## Original dataset----
+
+mn.df <- survey %>% 
+   dplyr::select(year, month, spec, la2, lo2, pods) %>% 
+   filter(spec == "mn") 
+
+mn.df$year <- as.factor(mn.df$year)
+str(mn.df)
+
 ### Adding the effort geopackage 
 
 effort <- st_read("NASS/ale_nass-effort.gpkg")
@@ -87,7 +96,7 @@ str(imp_locations)
    geom_point(data = imp_locations, aes(x = long, y = lat, colour = group), 
               colour = c("#0E4749", "#CC978E"), size = 3) +
    geom_sf(data = effort, color = "black", alpha = 0.6) + # effort
-   geom_point(data = n_ice_survey, aes(x = lo2, y = la2, colour = year)) + #adding pod sixe ad a point size, not sure is useful, just an idea
+   geom_point(data = mn.df, aes(x = lo2, y = la2, colour = year, size = pods), alpha = 0.7, fill = "black") + #adding pod sixe ad a point size, not sure is useful, just an idea
    #scale_color_manual(values = c("#70161E", "#F6BE13", "#5C80BC")) +
    scale_color_manual(values = c("#A06B9A", "#8D9EC6", "#082241")) +
    #geom_rect(data = ice_map, aes(xmin = 65, xmax = 68, ymin = -9, ymax = -20),
@@ -103,7 +112,7 @@ str(imp_locations)
         x = "Longitude", y = "Latitude") + 
    coord_sf())
 
-#ggsave(site_map, file = "img/survey_final.png", height = 5, width = 8)
+#ggsave(site_map, file = "img/survey_final2.png", height = 5, width = 8)
 
 ### Total sightings per year
 
@@ -153,7 +162,7 @@ bat_df <- as.data.frame(bathymetry, xy = TRUE, na.rm = TRUE)
 
 bat_df <- bat_df %>% filter(bat_1 < 0)
 
-(bat_plot <- ggplot() +
+#(bat_plot <- ggplot() +
       geom_raster(data = bat_df, aes(x = x, y = y, fill = bat_1)) +
       geom_contour(aes(z = Chla), binwidth = 2, colour = "red", alpha = 0.2) +
       geom_contour(aes(z = Chla), breaks = 0.1, colour = "darkgrey") +
@@ -188,7 +197,7 @@ bat_df <- bat_df %>% filter(bat_1 < 0)
          x = "Depth (m)", 
          y ="Count")) 
 
-ggsave(bat_dist, file = "img/bat_prof.png", height = 5, width = 9)
+#ggsave(bat_dist, file = "img/bat_prof.png", height = 5, width = 9)
 
     
 ### Chlorophyll----
@@ -296,7 +305,7 @@ survey_01 <- survey %>%
    filter(spec == "mn") %>% 
    filter (year == "2001")
 
-write_csv(survey_01, file = "NASS/intermediate surveys/by_year/survey_01.csv")
+#write_csv(survey_01, file = "NASS/intermediate surveys/by_year/survey_01.csv")
 
 ### 2007
 survey_07 <- survey %>% 
@@ -304,7 +313,7 @@ survey_07 <- survey %>%
    filter(spec == "mn") %>% 
    filter (year == "2007")
 
-write_csv(survey_07, file = "NASS/intermediate surveys/by_year/survey_07.csv")
+#write_csv(survey_07, file = "NASS/intermediate surveys/by_year/survey_07.csv")
 
 ### 2015
 survey_15 <- survey %>% 
@@ -312,7 +321,7 @@ survey_15 <- survey %>%
    filter(spec == "mn") %>% 
    filter (year == "2015")
 
-write_csv(survey_15, file = "NASS/intermediate surveys/by_year/survey_15.csv")
+#write_csv(survey_15, file = "NASS/intermediate surveys/by_year/survey_15.csv")
 
 ## Putting together csvs from the different years----
 
@@ -365,21 +374,77 @@ complete_15 <- complete_15 %>%
 
 prova_df <- rbind(complete_01, complete_07, complete_15) #you have to make sure to save them in the right order otherwise the name do not match
 
-## Effective Strip Width (ESW) for sightings----
+prova_df <- prova_df %>% mutate(presence = "1")
+
+(pods_dist <- ggplot(prova_df, aes(x = pods)) + 
+      geom_histogram(colour = "aquamarine4", fill = "aquamarine3")) #nice colors!
 
 
+## Rasterizing Shapefile----
+
+# Cell size: 0.08333 degrees
+
+# Albers projection 
+
+albers.crs <- "+proj=aea +x_0=0 +y_0=0 +lon_0=-30 +lat_0=30 +lat_1=43 +lat_2=62 +units=m +ellps=WGS84 +datum=WGS84 +no_defs"
+e.min <- -1250000
+e.max <- 2375000
+n.min <- 2070000
+n.max <- 5295000
+albers.cell <- 25000 # 25 km
+
+# WGS84
+wgs.crs <- "+init=epsg:4326" # all numbers below should match this CRS
+lon.min <- -27
+lon.max <- -10
+lat.min <- 64.5
+lat.max <- 68.5
+wgs.cell <- 0.0833 # 0.25 degrees
+
+# Create empty rasters 
+
+# ALBERS
+albers.ref <- raster() 
+projection(albers.ref) <- crs(albers.crs)
+extent(albers.ref) <- c(e.min, e.max, n.min, n.max)
+res(albers.ref) <- albers.cell
+albers.ref # check the metadata make sense
+
+# WGS84
+wgs.ref <- raster() 
+projection(wgs.ref) <- crs(wgs.crs)
+extent(wgs.ref) <- c(lon.min, lon.max, lat.min, lat.max)
+res(wgs.ref) <- wgs.cell
+wgs.ref # check the metadata make sense
+
+### STEP 2: rasterise sightings
+mn.shape <- mn.df %>%
+   mutate_at(vars(lo2, la2), as.numeric) %>%
+   st_as_sf(coords = c("lo2", "la2"), crs = wgs.crs)
+
+mn.shape <- st_transform(mn.shape, crs = albers.crs) # change crs from wgs84 to albers
+
+plot(mn.shape) 
 
 
+# Create function to calculate number of points in each raster cell. From https://gis.stackexchange.com/questions/309407/computing-number-of-points-in-a-raster-grid-cell-in-r
+pointcount = function(r, pts){
+   # make a raster of zeroes like the input
+   r2 = r
+   r2[] = 0
+   # get the cell index for each point and make a table:
+   counts = table(cellFromXY(r,pts))
+   # fill in the raster with the counts from the cell index:
+   r2[as.numeric(names(counts))] = counts
+   return(r2)
+}
 
+## Making a binary map
+sight_sf <- shapefile("NASS/intermediate surveys/by_year/2001_sf/2001_sf.shp")
+ext <- extent(-27, -10, 64.5, 68.5)
+ras <- raster(ext, res = 1/12)
 
-
-
-
-
-
-
-
-
+rr <- rasterize(sight_sf, ras, value=1, background = 0)
 
 
 

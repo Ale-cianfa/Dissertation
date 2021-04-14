@@ -118,20 +118,34 @@ comp_2015 <- comp_2015 %>%
 
 colnames(comp_2001) #printing out the column names
 
+col_order <- c("fid", "PA", "Lat", "Long", "bat", "mldAug", "mldJuly", "mldJune", "mldMay", "mldApril", "mldMarch",
+"sstAug", "sstJuly", "sstJune", "sstMay", "sstApril", "sstMarch", "chlorAug", "chlorJuly", "chlorJune",
+"chlorMay", "chlorApril", "chlorMarch")   
+
+comp_2001 <- comp_2001[, col_order]
+comp_2001
+
 ### 2007: 
 
 colnames(comp_2007)
+
+comp_2007 <- comp_2007[, col_order] #since the order is the same i should be able to reuse it
+comp_2007
 
 ### 2015: 
 
 colnames(comp_2015) 
 
-### notes on how to change the order: 
+comp_2015 <- comp_2015[, col_order]
+comp_2015
 
-col_order <- c("Species", "Petal.Width", "Sepal.Length",
-               "Sepal.Width", "Petal.Length")
-my_data2 <- my_data[, col_order]
-my_data2
+## CREATING ONE BIG DATA FRAME:----
+
+comp_df <- rbind(comp_2001, comp_2007, comp_2015) #you have to make sure to save them in the right order otherwise the name do not match
+
+#IT WORKED!! 
+
+
 
 
 

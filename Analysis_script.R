@@ -143,12 +143,48 @@ comp_2015
 
 comp_df <- rbind(comp_2001, comp_2007, comp_2015) #you have to make sure to save them in the right order otherwise the name do not match
 
+comp_df <- comp_df %>% 
+  drop_na() #remov ed all NAs from the dataframe (around 200 rows!)
+
+#write.csv(comp_df, file = "final_df/complete_data.csv")
+
 #IT WORKED!! 
 
+# MODELING---- 
+
+## COLLINEARITY:----
+
+## how should I test this, considering I have different moths? 
+  ## think i can probably divide it by month because I am not going to be mixing them 
 
 
+### July GAM initial: 
+gam_1 <- mgcv::gam(PA ~ s(bat, bs = "ps", sp = 1) + 
+                     s(chlorJuly, bs='ps', sp= 1) + 
+                     s(mldJuly, bs='ps', sp= 1) + 
+                     s(sstJuly, bs='ps', sp= 1) +
+                     s(Lat, bs = 're'), 
+                   family = "binomial", 
+                   data = comp_df)
+summary(gam_1)
 
+gam.check(gam_1)
 
+plot(gam_1, pages = 1)
+
+AIC(gam_1)
+
+### June GAM initial: 
+gam_2 <- mgcv::gam(PA ~ s(chlorJune, bs='ps', sp=0.6) + s(mldJune, bs='ps', sp=0.6) + s(sstJune, bs='ps', sp=0.6), family = "binomial", 
+                   data = comp_df)
+summary(gam_2)
+plot(gam_2, pages = 1)
+
+## MODEL EVALUATION----
+AIC(gam_1, gam_2)
+
+## OTHER THINGS THAT COULD HAVE BEEN CONIDERED: 
+  #The difference in weather
 
 
 

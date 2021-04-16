@@ -168,41 +168,54 @@ plot_qq(comp_df)
 
 plot_correlation(comp_df) # I think i need to check for colinearity by month? 
 
+# In the box there is the 
+  #rho is the Spearman’s correlation coefficient or
+  #cor Pearson's correlation (same thang) 
+
+
 ### March: 
 March <-comp_df[, c("Lat", "Long", "bat", "mldMarch", "sstMarch", "chlorMarch")]
 March.plot <- plot_correlation(March)
-ggsave(March.plot, file = "img/correlation/march.png", height = 4, width = 7)
+
+#ggsave(March.plot, file = "img/correlation/march.png", height = 4, width = 7)
 
 ### April: 
 April <-comp_df[, c("Lat", "Long", "bat", "mldApril", "sstApril", "chlorApril")]
 April.plot <- plot_correlation(April)
-ggsave(April.plot, file = "img/correlation/april.png", height = 4, width = 7)
+
+#ggsave(April.plot, file = "img/correlation/april.png", height = 4, width = 7)
 
 ### May: 
 May <- comp_df[, c("Lat", "Long", "bat", "mldMay", "sstMay", "chlorMay")]
 May.plot <- plot_correlation(May)
-ggsave(May.plot, file = "img/correlation/may.png", height = 4, width = 7)
+
+#ggsave(May.plot, file = "img/correlation/may.png", height = 4, width = 7)
 
 ### June: 
 June <- comp_df[, c("Lat", "Long", "bat", "mldJune", "sstJune", "chlorJune")]
 June.plot <- plot_correlation(June)
-ggsave(June.plot, file = "img/correlation/june.png", height = 4, width = 7)
+
+#ggsave(June.plot, file = "img/correlation/june.png", height = 4, width = 7)
 
 ### July: 
 July <- comp_df[, c("Lat", "Long", "bat", "mldJuly", "sstJuly", "chlorJuly")]
 July.plot <- plot_correlation(July)
-ggsave(July.plot, file = "img/correlation/july.png", height = 4, width = 7)
+
+#ggsave(July.plot, file = "img/correlation/july.png", height = 4, width = 7)
 
 ### August: 
 August <- comp_df[, c("Lat", "Long", "bat", "mldAug", "sstAug", "chlorAug")]
 Aug.plot <- plot_correlation(August)
-ggsave(Aug.plot, file = "img/correlation/august.png", height = 4, width = 7)
 
+#ggsave(Aug.plot, file = "img/correlation/august.png", height = 4, width = 7)
 
+## Trying Pearson's correlation: 
 
 
 ## GAMS:----
 
+install.packages("car")
+library(car)
 ### July GAM initial: 
 gam_1 <- mgcv::gam(PA ~ s(bat, bs = "ps", sp = 1) + 
                      s(chlorJuly, bs='ps', sp= 1) + 
@@ -211,6 +224,8 @@ gam_1 <- mgcv::gam(PA ~ s(bat, bs = "ps", sp = 1) +
                      s(Lat, bs = 're'), 
                    family = "binomial", 
                    data = comp_df)
+
+
 summary(gam_1)
 
 gam.check(gam_1)

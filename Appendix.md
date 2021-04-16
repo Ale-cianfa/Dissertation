@@ -34,3 +34,35 @@ survey_15 <- survey %>%
 
 write_csv(survey_15, file = "NASS/intermediate surveys/by_year/survey_15.csv")
 ```
+
+Appendix methods pt2:
+```
+library(DataExplorer)
+
+### March: 
+March <-comp_df[, c("Lat", "Long", "bat", "mldMarch", "sstMarch", "chlorMarch")]
+March.plot <- plot_correlation(March)
+
+ggsave(March.plot, file = "img/correlation/march.png", height = 4, width = 7)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

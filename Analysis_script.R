@@ -152,11 +152,56 @@ comp_df <- comp_df %>%
 
 # MODELING---- 
 
-## COLLINEARITY:----
+## CORRELATION ANALYSIS:----
 
 ## how should I test this, considering I have different moths? 
   ## think i can probably divide it by month because I am not going to be mixing them 
 
+### Trying to use package from Jacob's Tutorial: 
+library(DataExplorer)
+
+plot_bar(comp_df) #Plotting the distribution of the categorical variables
+
+plot_histogram(comp_df) #Plotting the distribution of all other variables 
+
+plot_qq(comp_df)
+
+plot_correlation(comp_df) # I think i need to check for colinearity by month? 
+
+### March: 
+March <-comp_df[, c("Lat", "Long", "bat", "mldMarch", "sstMarch", "chlorMarch")]
+March.plot <- plot_correlation(March)
+ggsave(March.plot, file = "img/correlation/march.png", height = 4, width = 7)
+
+### April: 
+April <-comp_df[, c("Lat", "Long", "bat", "mldApril", "sstApril", "chlorApril")]
+April.plot <- plot_correlation(April)
+ggsave(April.plot, file = "img/correlation/april.png", height = 4, width = 7)
+
+### May: 
+May <- comp_df[, c("Lat", "Long", "bat", "mldMay", "sstMay", "chlorMay")]
+May.plot <- plot_correlation(May)
+ggsave(May.plot, file = "img/correlation/may.png", height = 4, width = 7)
+
+### June: 
+June <- comp_df[, c("Lat", "Long", "bat", "mldJune", "sstJune", "chlorJune")]
+June.plot <- plot_correlation(June)
+ggsave(June.plot, file = "img/correlation/june.png", height = 4, width = 7)
+
+### July: 
+July <- comp_df[, c("Lat", "Long", "bat", "mldJuly", "sstJuly", "chlorJuly")]
+July.plot <- plot_correlation(July)
+ggsave(July.plot, file = "img/correlation/july.png", height = 4, width = 7)
+
+### August: 
+August <- comp_df[, c("Lat", "Long", "bat", "mldAug", "sstAug", "chlorAug")]
+Aug.plot <- plot_correlation(August)
+ggsave(Aug.plot, file = "img/correlation/august.png", height = 4, width = 7)
+
+
+
+
+## GAMS:----
 
 ### July GAM initial: 
 gam_1 <- mgcv::gam(PA ~ s(bat, bs = "ps", sp = 1) + 

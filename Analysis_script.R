@@ -346,9 +346,9 @@ gam_june_8 <- mgcv::gam(PA ~ s(bat, k = 22) +
                           s(chlorJune, k = 22) + 
                           s(mldJune, k = 22) + 
                           s(sstJune, k = 22) +
-                          s(Lat, bs = "re") +
-                          s(Long, bs = "re"),
-                        family = binomial("logit"),
+                          s(Lat, k = 22) +
+                          s(Long, k = 22),
+                        family = binomial,
                         data = comp_df)
 summary(gam_june_8)
 
@@ -357,6 +357,30 @@ gam.check(gam_june_8) #none of the p values are significant and k are almost at 
 plot(gam_june_8, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
 
 AIC(gam_june_8)
+
+
+### June 9: #just trying cause the smoothing paramenter, the more is small the more is overfitted
+gam_june_9 <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                          s(chlorJune, k = 5) + 
+                          s(mldJune, k = 5) + 
+                          s(sstJune, k = 5) +
+                          s(Lat, k = 5) +
+                          s(Long, k = 5),
+                        family = binomial,
+                        data = comp_df)
+summary(gam_june_9)
+
+gam.check(gam_june_9) #none of the p values are significant and k are almost at 1
+
+plot(gam_june_9, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+
+AIC(gam_june_9)
+
+
+
+
+
+
 
 
 

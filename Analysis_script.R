@@ -395,20 +395,48 @@ plot(gam_june_10, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightb
 AIC(gam_june_10, gam_june_8)
 
 ### June 11 bassoi et al: 
-gam_june_11 <- mgcv::gam(PA ~ s(bat, fx = F, k= 5) + 
-                           s(chlorJune, fx = F,k= 5) + 
-                           #s(mldJune) + 
-                           s(sstJune, fx = F, k= 5) +
-                           #s(Lat, fx = F, k= 5),
-                           s(Long, fx = F, k= 5),
+gam_june_11 <- mgcv::gam(PA ~ s(bat) + 
+                           s(chlorJune) + 
+                           s(mldJune) + 
+                           s(sstJune),
                          family = "binomial",
-                         #method = "REML",
+                         method = "REML",
                          data = comp_df)
 summary(gam_june_11)
 gam.check(gam_june_11)
 
 plot(gam_june_11, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
 AIC(gam_june_11, gam_june_8)
+
+## May:----
+
+gam_may_1 <- mgcv::gam(PA ~ s(bat) + 
+                           s(chlorMay) + 
+                           s(mldMay) + 
+                           s(sstMay),
+                         family = "binomial",
+                         method = "REML",
+                         data = comp_df)
+summary(gam_may_1)
+gam.check(gam_may_1)
+
+plot(gam_may_1, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(gam_may_1)
+
+## July:----
+
+gam_jul_1 <- mgcv::gam(PA ~ s(bat) + 
+                         s(chlorJuly) + 
+                         s(mldJuly) + 
+                         s(sstJuly),
+                       family = "binomial",
+                       method = "REML",
+                       data = comp_df)
+summary(gam_jul_1)
+gam.check(gam_jul_1)
+
+plot(gam_jul_1, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(gam_jul_1)
 
 
 

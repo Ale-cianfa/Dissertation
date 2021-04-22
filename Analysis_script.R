@@ -81,6 +81,9 @@ comp_2001 <- comp_2001 %>%
          sstMay = sst_0105, sstJune = sst_0106, 
          sstJuly = sst_0107, sstAug = sst_0108)
 
+#comp_2001$year <- 2001
+  
+
 ### 2007:
 comp_2007 <- read.csv("final_df/by_year/2007_final_ds.csv")
 
@@ -97,6 +100,7 @@ comp_2007 <- comp_2007 %>%
          sstMay = sst_0705, sstJune = sst_0706, 
          sstJuly = sst_0707, sstAug = sst_0708)
 
+#comp_2007$year <- 2007
 
 ### 2015:
 comp_2015 <- read.csv("final_df/by_year/2015_final_df2.csv") #MISSING LAT LONG!!
@@ -112,7 +116,10 @@ comp_2015 <- comp_2015 %>%
          mldJuly = mlotst_157, mldAug = mlotst_158, 
          sstMarch = sst_1503, sstApril = sst_1504,
          sstMay = sst_1505, sstJune = sst_1506, 
-         sstJuly = sst_1507, sstAug = sst_1508)
+         sstJuly = sst_1507, sstAug = sst_1508) 
+
+#comp_2015$year <- 2015
+
 
 ## CHANGING ORDER OF COLUMNS:----
 
@@ -148,6 +155,7 @@ comp_df <- rbind(comp_2001, comp_2007, comp_2015) #you have to make sure to save
 comp_df <- comp_df %>% 
   drop_na() #remov ed all NAs from the dataframe (around 200 rows!)
 
+#comp_df$year <- as.factor(comp_df$year)
 #write.csv(comp_df, file = "final_df/complete_data.csv")
 
 #IT WORKED!! 
@@ -219,11 +227,11 @@ Aug.plot <- plot_correlation(August)
 ## June:----
 
 ### june 2001: 
-gam_june_2001 <- mgcv::gam(PA ~ s(bat) + 
-                          s(chlorJune) + 
-                          s(mldJune) + 
-                          s(sstJune),
-                        family = binomial, method = "REML",
+gam_june_2001 <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                          s(chlorJune, k = 5) + 
+                          s(mldJune, k = 5) + 
+                          s(sstJune, k = 5),
+                        family = binomial,
                         data = comp_2001)
 summary(gam_june_2001)
 
@@ -235,11 +243,11 @@ AIC(gam_june_2001) #288.4568
 
 
 ### june 2007: 
-gam_june_2007 <- mgcv::gam(PA ~ s(bat) + 
-                             s(chlorJune) + 
-                             s(mldJune) + 
-                             s(sstJune),
-                           family = binomial, method = "REML",
+gam_june_2007 <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                             s(chlorJune, k = 5) + 
+                             s(mldJune, k = 5) + 
+                             s(sstJune, k = 5),
+                           family = binomial,
                            data = comp_2007)
 summary(gam_june_2007)
 
@@ -251,12 +259,11 @@ AIC(gam_june_2007) #79.76937
 
 ### june 2015
 
-### june 2007: 
-gam_june_2015 <- mgcv::gam(PA ~ s(bat) + 
-                             s(chlorJune) + 
-                             s(mldJune) + 
-                             s(sstJune),
-                           family = binomial, method = "REML",
+gam_june_2015 <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                             s(chlorJune, k = 5) + 
+                             s(mldJune, k = 5) + 
+                             s(sstJune, k = 5),
+                           family = binomial,
                            data = comp_2015)
 summary(gam_june_2015)
 
@@ -266,22 +273,6 @@ plot(gam_june_2015, pages = 1)
 
 AIC(gam_june_2015) #161.8301
 
-### June 4:
-gam_june_4 <- mgcv::gam(PA ~ s(chlorJune) + 
-                          s(mldJune) + 
-                          s(sstJune) +
-                          s(bat),
-                        family = "binomial", 
-                        method = "REML",
-                        data = comp_df)
-summary(gam_june_4)
-
-gam.check(gam_june_4)
-
-plot(gam_june_4, pages = 1)
-
-AIC(gam_june_4)
-
 #K is the numnber of basis functions that we want to set for our data, 
   #and that also determines the smoothness
 
@@ -289,10 +280,8 @@ AIC(gam_june_4)
 gam_june_9 <- mgcv::gam(PA ~ s(bat, k = 5) + 
                           s(chlorJune, k = 5) + 
                           s(mldJune, k = 5) + 
-                          s(sstJune, k = 5) +
-                          s(Lat, k = 5) +
-                          s(Long, k = 5),
-                        family = binomial,
+                          s(sstJune, k = 5),
+                        family = "binomial",
                         data = comp_df)
 summary(gam_june_9)
 
@@ -300,25 +289,7 @@ gam.check(gam_june_9) #none of the p values are significant and k are almost at 
 
 plot(gam_june_9, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
 
-AIC(gam_june_9, gam_june_8)
-
-
-### June 10: #just trying cause the smoothing paramenter, the more is small the more is overfitted
-gam_june_10 <- mgcv::gam(PA ~ s(bat, bs="tp") + 
-                          s(chlorJune, bs="tp") + 
-                          s(mldJune, bs="tp") + 
-                          s(sstJune, bs="tp") +
-                          s(Lat, bs="tp") +
-                          s(Long, bs="tp"),
-                        family = binomial,
-                        data = comp_df)
-summary(gam_june_10)
-
-gam.check(gam_june_10) #none of the p values are significant and k are almost at 1
-
-plot(gam_june_10, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
-
-AIC(gam_june_10, gam_june_8)
+AIC(gam_june_9)
 
 ### June 11 bassoi et al: 
 gam_june_11 <- mgcv::gam(PA ~ s(bat) + 
@@ -326,13 +297,17 @@ gam_june_11 <- mgcv::gam(PA ~ s(bat) +
                            s(mldJune) + 
                            s(sstJune),
                          family = "binomial",
-                         method = "REML",
+                         #method = "REML",
                          data = comp_df)
 summary(gam_june_11)
 gam.check(gam_june_11)
+AIC(gam_june_11)
 
-plot(gam_june_11, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
-AIC(gam_june_11, gam_june_8)
+png('img/gam_june_11.png')
+plot(gam_june_11, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "#A4CF5BB8")
+dev.off()
+
+
 
 ## May:----
 
@@ -347,6 +322,7 @@ summary(gam_may_1)
 gam.check(gam_may_1)
 
 plot(gam_may_1, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+
 AIC(gam_may_1)
 
 ## July:----
@@ -362,8 +338,38 @@ summary(gam_jul_1)
 gam.check(gam_jul_1)
 
 plot(gam_jul_1, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
-AIC(gam_jul_1)
+AIC(gam_jul_1, gam_may_1,gam_june_11)
 
+## CHANGES IN ENV VARIABLES OVER THE YEARS----
+(sst_change <- ggplot() +
+  geom_boxplot(data = comp_df, aes(x = year, y = sstJune, group = year)) +
+  scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+  geom_jitter(color="black", size=0.4, alpha=0.9) +
+  theme_ipsum() +
+  theme(legend.position="none",
+    plot.title = element_text(size=11)) +
+  ggtitle("sst_change") +
+  xlab(""))
+
+(mld_change <- ggplot() +
+    geom_boxplot(data = comp_df, aes(x = year, y = mldJune, group = year)) +
+    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+    geom_jitter(color="black", size=0.4, alpha=0.9) +
+    theme_ipsum() +
+    theme(legend.position="none",
+          plot.title = element_text(size=11)) +
+    ggtitle("mld_change") +
+    xlab(""))
+
+(chlor_change <- ggplot() +
+    geom_boxplot(data = comp_df, aes(x = year, y = chlorJune, group = year)) +
+    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+    geom_jitter(color="black", size=0.4, alpha=0.9) +
+    theme_ipsum() +
+    theme(legend.position="none",
+          plot.title = element_text(size=11)) +
+    ggtitle("chlor_change") +
+    xlab(""))
 
 
 

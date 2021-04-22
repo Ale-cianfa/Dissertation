@@ -251,7 +251,7 @@ gam.check(gam_june_2)
 
 plot(gam_june_2, pages = 1) #this almost looks linear, kind of weir, not like
 
-AIC(gam_june_2)
+AIC(gam_june_2, gam_june_1)
 
 ### June 3:
 gam_june_3 <- mgcv::gam(PA ~ s(bat, k = 60) + 
@@ -342,12 +342,12 @@ plot(gam_june_7, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightbl
 AIC(gam_june_7)
 
 ### June 8:
-gam_june_8 <- mgcv::gam(PA ~ s(bat, k = 22) + 
-                          s(chlorJune, k = 22) + 
-                          s(mldJune, k = 22) + 
-                          s(sstJune, k = 22) +
-                          s(Lat, k = 22) +
-                          s(Long, k = 22),
+gam_june_8 <- mgcv::gam(PA ~ s(bat, fx = F, k = 22) + 
+                          s(chlorJune,fx = F, k = 22) + 
+                          s(mldJune, fx = F, k = 22) + 
+                          s(sstJune, fx = F, k = 22) +
+                          s(Lat, fx = F, k = 22) +
+                          s(Long, fx = F, k = 22),
                         family = binomial,
                         data = comp_df)
 summary(gam_june_8)
@@ -374,10 +374,41 @@ gam.check(gam_june_9) #none of the p values are significant and k are almost at 
 
 plot(gam_june_9, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
 
-AIC(gam_june_9)
+AIC(gam_june_9, gam_june_8)
 
 
+### June 10: #just trying cause the smoothing paramenter, the more is small the more is overfitted
+gam_june_10 <- mgcv::gam(PA ~ s(bat, bs="tp") + 
+                          s(chlorJune, bs="tp") + 
+                          s(mldJune, bs="tp") + 
+                          s(sstJune, bs="tp") +
+                          s(Lat, bs="tp") +
+                          s(Long, bs="tp"),
+                        family = binomial,
+                        data = comp_df)
+summary(gam_june_10)
 
+gam.check(gam_june_10) #none of the p values are significant and k are almost at 1
+
+plot(gam_june_10, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+
+AIC(gam_june_10, gam_june_8)
+
+### June 11 bassoi et al: 
+gam_june_11 <- mgcv::gam(PA ~ s(bat, fx = F, k= 5) + 
+                           s(chlorJune, fx = F,k= 5) + 
+                           #s(mldJune) + 
+                           s(sstJune, fx = F, k= 5) +
+                           #s(Lat, fx = F, k= 5),
+                           s(Long, fx = F, k= 5),
+                         family = "binomial",
+                         #method = "REML",
+                         data = comp_df)
+summary(gam_june_11)
+gam.check(gam_june_11)
+
+plot(gam_june_11, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(gam_june_11, gam_june_8)
 
 
 

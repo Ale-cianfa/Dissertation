@@ -46,6 +46,16 @@ March.plot <- plot_correlation(March)
 ggsave(March.plot, file = "img/correlation/march.png", height = 4, width = 7)
 ```
 
+```
+gam_june_9 <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                          s(chlorJune, k = 5) + 
+                          s(mldJune, k = 5) + 
+                          s(sstJune, k = 5),
+                        family = "binomial",
+                        data = comp_df)
+```                   
+                        
+                  
 
 
 

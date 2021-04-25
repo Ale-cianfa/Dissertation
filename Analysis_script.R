@@ -493,10 +493,6 @@ AIC(may_1)
     ggtitle("chlor_change") +
     xlab(""))
 
-
-
-
-
 dataset <- comp_df %>% 
   dplyr::select(-c(mldMarch, sstMarch, chlorMarch, 
             mldApril, sstApril, chlorApril,  

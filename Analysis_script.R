@@ -35,8 +35,7 @@ survey$spec <- as.factor(survey$spec) #species needs to be a factor for filterin
 ### Selecting only the important bits of the dataset: 
 survey <- survey %>% 
   dplyr::select(year, month, spec, la2, lo2, bfss,pods) %>% 
-  filter(spec == "mn") %>% 
-  filter(bfss < 5)
+  filter(spec == "mn")
 
 ## SURVEY BY YEAR:----
   # I am doing this so that I can work on a QGIS project for each year independently 
@@ -230,14 +229,16 @@ Aug.plot <- plot_correlation(August)
 gam_june_2001 <- mgcv::gam(PA ~ s(bat, k = 5) + 
                           s(chlorJune, k = 5) + 
                           s(mldJune, k = 5) + 
-                          s(sstJune, k = 5),
+                          s(sstJune, k = 5) +
+                          s(Lat, k = 5) +
+                          s(Long, k = 5),
                         family = binomial,
                         data = comp_2001)
 summary(gam_june_2001)
 
 gam.check(gam_june_2001) #k index is close to 1 for almost all, lat and long are weird 
 
-plot(gam_june_2001, pages = 1)
+plot(gam_june_2001, pages = 1, shade = TRUE, shade.col = "#A36D9EAC")
 
 AIC(gam_june_2001) #288.4568
 
@@ -246,14 +247,16 @@ AIC(gam_june_2001) #288.4568
 gam_june_2007 <- mgcv::gam(PA ~ s(bat, k = 5) + 
                              s(chlorJune, k = 5) + 
                              s(mldJune, k = 5) + 
-                             s(sstJune, k = 5),
+                             s(sstJune, k = 5) +
+                             s(Lat, k = 5) +
+                             s(Long, k = 5),
                            family = binomial,
                            data = comp_2007)
 summary(gam_june_2007)
 
 gam.check(gam_june_2007) #k index is close to 1 for almost all, lat and long are weird 
 
-plot(gam_june_2007, pages = 1)
+plot(gam_june_2007, pages = 1, shade = TRUE, shade.col = "#092342BB")
 
 AIC(gam_june_2007) #79.76937
 
@@ -262,83 +265,202 @@ AIC(gam_june_2007) #79.76937
 gam_june_2015 <- mgcv::gam(PA ~ s(bat, k = 5) + 
                              s(chlorJune, k = 5) + 
                              s(mldJune, k = 5) + 
-                             s(sstJune, k = 5),
+                             s(sstJune, k = 5) +
+                             s(Lat, k = 5) +
+                             s(Long, k = 5),
                            family = binomial,
                            data = comp_2015)
 summary(gam_june_2015)
 
 gam.check(gam_june_2015) #k index is close to 1 for almost all, lat and long are weird 
 
-plot(gam_june_2015, pages = 1)
+plot(gam_june_2015, pages = 1, shade = TRUE, shade.col = "#2B496BC2")
 
 AIC(gam_june_2015) #161.8301
 
 #K is the numnber of basis functions that we want to set for our data, 
   #and that also determines the smoothness
 
-### June 9: #just trying cause the smoothing paramenter, the more is small the more is overfitted
-gam_june_9 <- mgcv::gam(PA ~ s(bat, k = 5) + 
+### June 1: #just trying cause the smoothing paramenter, the more is small the more is overfitted
+june_1 <- mgcv::gam(PA ~ s(bat, k = 5) + 
                           s(chlorJune, k = 5) + 
                           s(mldJune, k = 5) + 
                           s(sstJune, k = 5),
                         family = "binomial",
+                        method = "REML",
                         data = comp_df)
-summary(gam_june_9)
+summary(june_1)
 
-gam.check(gam_june_9) #none of the p values are significant and k are almost at 1
+gam.check(june_1) #none of the p values are significant and k are almost at 1
 
-plot(gam_june_9, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+plot(june_1, pages = 1, residuals = FALSE, shade = TRUE, shade.col = "#B0A6C9")
 
-AIC(gam_june_9)
+AIC(june_1)
 
-### June 11 bassoi et al: 
-gam_june_11 <- mgcv::gam(PA ~ s(bat) + 
-                           s(chlorJune) + 
-                           s(mldJune) + 
-                           s(sstJune),
-                         family = "binomial",
-                         #method = "REML",
-                         data = comp_df)
-summary(gam_june_11)
-gam.check(gam_june_11)
-AIC(gam_june_11)
+### June 2: 
+june_2 <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                      #s(chlorJune, k = 5) + as this wasn't significant in the model before
+                      s(mldJune, k = 5) + 
+                      s(sstJune, k = 5),
+                    family = "binomial",
+                    data = comp_df)
+summary(june_2)
 
-png('img/gam_june_11.png')
-plot(gam_june_11, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "#A4CF5BB8")
-dev.off()
+gam.check(june_2) #none of the p values are significant and k are almost at 1
 
+plot(june_2, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
 
+AIC(june_2)
 
-## May:----
+### June 3: 
+june_3 <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                      s(chlorJune, k = 5) +
+                      #s(mldJune, k = 5) + #as this is always having issues in the gam check
+                      s(sstJune, k = 5),
+                    family = "binomial",
+                    data = comp_df)
+summary(june_3)
 
-gam_may_1 <- mgcv::gam(PA ~ s(bat) + 
-                           s(chlorMay) + 
-                           s(mldMay) + 
-                           s(sstMay),
-                         family = "binomial",
-                         method = "REML",
-                         data = comp_df)
-summary(gam_may_1)
-gam.check(gam_may_1)
+gam.check(june_3) #none of the p values are significant and k are almost at 1
 
-plot(gam_may_1, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+plot(june_3, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
 
-AIC(gam_may_1)
+AIC(june_3)
 
-## July:----
+### June 4: 
+june_4 <- mgcv::gam(PA ~ s(bat, k = 4) + 
+                      s(chlorJune, k = 4) +
+                      #s(mldJune, k = 5) +
+                      s(sstJune, k = 4) +
+                      s(Lat, k = 5) +
+                      s(Long, k = 4),
+                    family = "binomial",
+                    data = comp_df)
+summary(june_4)
 
-gam_jul_1 <- mgcv::gam(PA ~ s(bat) + 
-                         s(chlorJuly) + 
-                         s(mldJuly) + 
-                         s(sstJuly),
+gam.check(june_4) #none of the p values are significant and k are almost at 1
+
+plot(june_4, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+
+AIC(june_4)
+
+### June 5: 
+june_5 <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                      s(chlorJune, k = 5) +
+                      s(mldJune, k = 5) +
+                      s(sstJune, k = 5) +
+                      s(Lat, k = 5) +
+                      s(Long, k = 5),
+                    family = "binomial",
+                    data = comp_df)
+summary(june_5)
+
+gam.check(june_5) #none of the p values are significant and k are almost at 1
+
+plot(june_5, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+
+AIC(june_5)
+
+### June 6: 
+june_6 <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                      s(chlorJune, k = 5) +
+                      #s(mldJune, k = 5) +
+                      s(sstJune, k = 5) +
+                      s(Lat, k = 5) +
+                      s(Long, k = 5),
+                    family = "binomial",
+                    method = "REML",
+                    data = comp_df)
+summary(june_6)
+
+gam.check(june_6) #none of the p values are significant and k are almost at 1
+
+plot(june_6, pages = 1, residuals = FALSE, shade = TRUE, shade.col = "#B0A6C9")
+
+# light green #B3C6B3
+# nice purple #9B9AB8 and #B8B7CC (ligher)
+#even nicer purple #9E90BD
+AIC(june_6)
+
+## JULY:---- 
+
+### july_1
+jul_1 <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                         s(chlorJuly, k = 5) + 
+                         s(mldJuly, k = 5) + 
+                         s(sstJuly, k = 5) +
+                         s(Lat, k = 5) +
+                         s(Long, k = 5),
                        family = "binomial",
-                       method = "REML",
                        data = comp_df)
-summary(gam_jul_1)
-gam.check(gam_jul_1)
+summary(jul_1)
+gam.check(jul_1)
 
-plot(gam_jul_1, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
-AIC(gam_jul_1, gam_may_1,gam_june_11)
+plot(jul_1, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(jul_1)
+
+### july 2
+jul_2 <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                     s(chlorJuly, k = 5) + 
+                     #s(mldJuly, k = 5) + 
+                     s(sstJuly, k = 5) +
+                     #s(Lat, k = 5),
+                     #s(Long, k = 5),
+                   family = "binomial",
+                   data = comp_df)
+summary(jul_2)
+gam.check(jul_2)
+
+plot(jul_2, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(jul_2)
+
+
+### july 3
+jul_3 <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                     s(chlorJuly, k = 5) + 
+                     #s(mldJuly, k = 5) + 
+                     s(sstJuly, k = 5) +
+                   s(Lat, k = 5),
+                   #s(Long, k = 5),
+                   family = "binomial",
+                   data = comp_df)
+summary(jul_3)
+gam.check(jul_3)
+
+plot(jul_3, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(jul_3)
+
+### july 4
+jul_4 <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                     s(chlorJuly, k = 5) + 
+                     s(mldJuly, k = 5) + 
+                     s(sstJuly, k = 5),
+                     #s(Lat, k = 5) +
+                     #s(Long, k = 5),
+                   family = "binomial",
+                   data = comp_df)
+summary(jul_4)
+gam.check(jul_4)
+
+plot(jul_4, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(jul_4)
+
+
+may_1 <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                     s(chlorMay, k = 5) + 
+                     s(mldMay, k = 5) + 
+                     s(sstMay, k = 5) +
+                     s(Lat, k = 5) +
+                     s(Long, k = 5),
+                   family = "binomial",
+                   data = comp_df)
+summary(may_1)
+gam.check(may_1)
+
+plot(may_1, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(may_1)
+
+
 
 ## CHANGES IN ENV VARIABLES OVER THE YEARS----
 (sst_change <- ggplot() +
@@ -370,6 +492,18 @@ AIC(gam_jul_1, gam_may_1,gam_june_11)
           plot.title = element_text(size=11)) +
     ggtitle("chlor_change") +
     xlab(""))
+
+
+
+
+
+dataset <- comp_df %>% 
+  dplyr::select(-c(mldMarch, sstMarch, chlorMarch, 
+            mldApril, sstApril, chlorApril,  
+            mldAug, sstAug, chlorAug, mldMay, sstMay, chlorMay))
+write_csv(dataset, file = "final_df/datset_result_appendix.csv")
+
+
 
 
 

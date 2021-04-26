@@ -59,7 +59,7 @@ Appendix Intro --> general GAM
 
 ``` 
 gam <- mgcv::gam(PA ~ s(bat, k = 5) + 
-                      s(chloropyll, k = 5) +
+                      s(chlorophyll, k = 5) +
                       s(mld, k = 5) +
                       s(sst, k = 5) +
                       s(Latitude, k = 5) +

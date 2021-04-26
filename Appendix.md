@@ -54,8 +54,25 @@ gam_june_9 <- mgcv::gam(PA ~ s(bat, k = 5) +
                         family = "binomial",
                         data = comp_df)
 ```                   
-                        
-                  
+
+Appendix Intro --> general GAM
+
+``` 
+gam <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                      s(chloropyll, k = 5) +
+                      s(mld, k = 5) +
+                      s(sst, k = 5) +
+                      s(Latitude, k = 5) +
+                      s(Longitude, k = 5),
+                    family = "binomial",
+                    data = comp_df)
+summary(gam)
+
+plot(gam, pages = 1, shade = TRUE, shade.col = "#B0A6C9")
+
+AIC(gam)
+``` 
+           
 
 
 

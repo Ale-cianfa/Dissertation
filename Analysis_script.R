@@ -11,13 +11,12 @@ library(maps) #for the base map data
 library(hrbrthemes) #for the fonts in ggplot
 library(ggrepel)
 library(ggthemes) #for extra map themes
-library(raster)
+library(raster) #for plotting env variables
 library(rgdal)
-library(rasterVis)
-library(sp)
-library(mgcv) #for gam 1
-library(gam) #for gam 2
-library(car)
+library(rasterVis) 
+library(sp) 
+library(mgcv) #for gams
+library(car) #can't remember for the life of me
 
 getwd() #checking that this is right
 
@@ -31,6 +30,8 @@ head(survey) #making sure is imported right
 str(survey) #checking what each thing is 
 
 survey$spec <- as.factor(survey$spec) #species needs to be a factor for filtering
+
+effort <- st_read("NASS/ale_nass-effort.gpkg")
 
 ### Selecting only the important bits of the dataset: 
 survey <- survey %>% 
@@ -184,31 +185,31 @@ plot_correlation(comp_df) # I think i need to check for colinearity by month?
 
 ### March: 
 March <-comp_df[, c("Lat", "Long", "bat", "mldMarch", "sstMarch", "chlorMarch")]
-March.plot <- plot_correlation(March)
+March.plot <- plot_correlation(March, type = "continuous")
 
 #ggsave(March.plot, file = "img/correlation/march.png", height = 4, width = 7)
 
 ### April: 
 April <-comp_df[, c("Lat", "Long", "bat", "mldApril", "sstApril", "chlorApril")]
-April.plot <- plot_correlation(April)
+April.plot <- plot_correlation(April, type = "continuous")
 
 #ggsave(April.plot, file = "img/correlation/april.png", height = 4, width = 7)
 
 ### May: 
 May <- comp_df[, c("Lat", "Long", "bat", "mldMay", "sstMay", "chlorMay")]
-May.plot <- plot_correlation(May)
+May.plot <- plot_correlation(May, type = "continuous")
 
 #ggsave(May.plot, file = "img/correlation/may.png", height = 4, width = 7)
 
 ### June: 
 June <- comp_df[, c("Lat", "Long", "bat", "mldJune", "sstJune", "chlorJune")]
-June.plot <- plot_correlation(June)
+June.plot <- plot_correlation(June, type = "continuous")
 
 #ggsave(June.plot, file = "img/correlation/june.png", height = 4, width = 7)
 
 ### July: 
 July <- comp_df[, c("Lat", "Long", "bat", "mldJuly", "sstJuly", "chlorJuly")]
-July.plot <- plot_correlation(July)
+July.plot <- plot_correlation(July, type = "continuous")
 
 #ggsave(July.plot, file = "img/correlation/july.png", height = 4, width = 7)
 
@@ -287,11 +288,9 @@ june_1 <- mgcv::gam(PA ~ s(bat, k = 5) +
                           s(mldJune, k = 5) + 
                           s(sstJune, k = 5),
                         family = "binomial",
-                        method = "REML",
+                        scales = "free",
                         data = comp_df)
 summary(june_1)
-
-gam.check(june_1) #none of the p values are significant and k are almost at 1
 
 plot(june_1, pages = 1, residuals = FALSE, shade = TRUE, shade.col = "#B0A6C9")
 
@@ -369,13 +368,29 @@ june_6 <- mgcv::gam(PA ~ s(bat, k = 5) +
                       s(Lat, k = 5) +
                       s(Long, k = 5),
                     family = "binomial",
-                    method = "REML",
                     data = comp_df)
 summary(june_6)
 
 gam.check(june_6) #none of the p values are significant and k are almost at 1
 
 plot(june_6, pages = 1, residuals = FALSE, shade = TRUE, shade.col = "#B0A6C9")
+
+AIC(june_6)
+
+concurvity(june_6,full=FALSE)
+
+
+may_6 <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                      s(chlorApril, k = 5) +
+                      s(mldApril, k = 5) +
+                      s(sstApril, k = 5) +
+                      s(Lat, k = 5) +
+                      s(Long, k = 5),
+                    family = "binomial",
+                    data = comp_df)
+summary(may_6)
+
+AIC(may_6)
 
 # light green #B3C6B3
 # nice purple #9B9AB8 and #B8B7CC (ligher)
@@ -499,6 +514,281 @@ dataset <- comp_df %>%
             mldAug, sstAug, chlorAug, mldMay, sstMay, chlorMay))
 write_csv(dataset, file = "final_df/datset_result_appendix.csv")
 
+## Adressing new research questions----
+
+## March
+march_e_1 <- mgcv::gam(PA ~ #s(bat, k = 5) + 
+                      s(chlorMarch, k = 5) + 
+                      s(mldMarch, k = 5) + 
+                      s(sstMarch, k = 5),
+                    family = "binomial",
+                    data = comp_df)
+summary(march_e_1)
+
+plot(march_e_1, pages = 1, residuals = FALSE, shade = TRUE, shade.col = "lightblue")
+
+AIC(march_e_1)
+
+## April
+april_e_1 <- mgcv::gam(PA ~ #s(bat, k = 5) + 
+                         s(chlorApril, k = 5) + 
+                         s(mldApril, k = 5) + 
+                         s(sstApril, k = 5),
+                       family = "binomial",
+                       data = comp_df)
+summary(april_e_1)
+
+plot(april_e_1, pages = 1, residuals = FALSE, shade = TRUE, shade.col = "#B3C6B3")
+
+AIC(april_e_1)
+
+
+## May----
+may_e_1 <- mgcv::gam(PA ~ s(chlorMay, k = 5) + 
+                         s(mldMay, k = 5) + 
+                         s(sstMay, k = 5),
+                       family = "binomial",
+                       data = comp_df)
+summary(may_e_1)
+
+plot(may_e_1, pages = 1, shade = TRUE, shade.col = "#B3C6B3")
+
+AIC(may_e_1)
+
+## June
+june_e_1 <- mgcv::gam(PA ~ s(bat, k = 5) +
+                       s(chlorJune, k = 5) + 
+                       s(mldJune, k = 5) + 
+                       s(sstJune, k = 5),
+                     family = "binomial",
+                     data = comp_df)
+summary(june_e_1)
+
+plot(june_e_1, pages = 1, residuals = FALSE, shade = TRUE, shade.col = "lightblue")
+
+AIC(june_e_1)
+
+## July
+july_e_1 <- mgcv::gam(PA ~ s(bat, k = 5) +
+                        s(chlorJuly, k = 5) + 
+                        s(mldJuly, k = 5) + 
+                        s(sstJuly, k = 5),
+                      family = "binomial",
+                      data = comp_df)
+summary(july_e_1)
+
+plot(july_e_1, pages = 1, residuals = FALSE, shade = TRUE, shade.col = "lightblue")
+
+AIC(july_e_1)
+
+#AUgust
+
+aug_e_1 <- mgcv::gam(PA ~ s(bat, k = 5) +
+                        s(chlorAug, k = 5) + 
+                        s(mldAug, k = 5) + 
+                        s(sstAug, k = 5),
+                      family = "binomial",
+                      data = comp_df)
+summary(aug_e_1)
+
+plot(aug_e_1, pages = 1, residuals = FALSE, shade = TRUE, shade.col = "lightblue")
+
+AIC(aug_e_1)
+
+## fixed parameters----
+
+fixed <- mgcv::gam(PA ~ s(bat, k = 5) +
+                                s(Lat, k = 5) +
+                                s(Long, k = 5),
+                              family = "binomial",
+                              data = comp_df)
+summary(fixed)
+
+plot(fixed, pages = 1, residuals = FALSE, shade = TRUE, shade.col = "#C4979C")
+
+AIC(fixed)
+
+
+## FINAL MODEL----
+
+## April
+apr <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                     s(chlorApril, k = 5) + 
+                     s(mldApril, k = 5) + 
+                     s(sstApril, k = 5) +
+                     s(Lat, k = 5) +
+                     s(Long, k = 5),
+                     family = "binomial",
+                   data = comp_df)
+summary(apr)
+plot(apr, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(apr)
+
+
+## May 
+
+may1 <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                   s(chlorMay, k = 5) + 
+                   s(mldMay, k = 5) + 
+                   s(sstMay, k = 5) +
+                   s(Lat, k = 5) +
+                   s(Long, k = 5),
+                 family = "binomial",
+                 data = comp_df)
+summary(may1)
+plot(may1, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(may1)
+
+may2 <- mgcv::gam(PA ~  
+                    s(chlorMay, k = 5) + 
+                    s(mldMay, k = 5) + 
+                    s(sstMay, k = 5) +
+                    s(Long, k = 5),
+                  family = "binomial",
+                  data = comp_df)
+summary(may2)
+plot(may2, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(may2)
+
+
+may3 <- mgcv::gam(PA ~  s(bat, k = 5) +
+                    s(chlorMay, k = 5) + 
+                    s(sstMay, k = 5) +
+                    s(Lat, k = 5) +
+                    s(Long, k = 5),
+                  family = "binomial",
+                  data = comp_df)
+summary(may3)
+plot(may3, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(may3)
+
+
+may6 <- mgcv::gam(PA ~  s(bat, k = 5) +
+                    #s(chlorMay, k = 5) + 
+                    s(sstMay, k = 5) +
+                    s(mldMay, k = 5) + 
+                    #s(Lat, k = 5) +
+                    s(Long, k = 5),
+                  family = "binomial",
+                  data = comp_df)
+summary(may6)
+plot(may6, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(may6)
+
+may5 <- mgcv::gam(PA ~  s(bat, k = 5) +
+                    s(chlorMay, k = 5) +
+                    s(mldMay, k = 5) +
+                    #s(sstMay, k = 5) +
+                    s(Lat, k = 5),
+                    #s(Long, k = 5),
+                  family = "binomial",
+                  data = comp_df)
+summary(may5)
+plot(may5, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(may5)
+
+
+may7 <- mgcv::gam(PA ~  s(bat, k = 5) +
+                    #s(chlorMay, k = 5) +
+                    s(mldMay, k = 5) +
+                    s(sstMay, k = 5) +
+                    s(Lat, k = 5) +
+                  s(Long, k = 5),
+                  family = "binomial",
+                  data = comp_df)
+summary(may7)
+plot(may7, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(may7)
+
+may8 <- mgcv::gam(PA ~  s(bat, k = 5) +
+                    #s(chlorMay, k = 5) +
+                    s(mldMay, k = 5) +
+                    s(sstMay, k = 5) +
+                    s(Lat, k = 5) +
+                    s(Long, k = 5),
+                  family = "binomial",
+                  data = comp_df)
+summary(may8)
+plot(may8, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(may8)
+
+
+may9 <- mgcv::gam(PA ~
+                    s(chlorMay, k = 5) +
+                    s(mldMay, k = 5) +
+                    s(sstMay, k = 5) +
+                    s(Lat, k = 5) +
+                    s(Long, k = 5),
+                  family = "binomial",
+                  data = comp_df)
+summary(may9)
+plot(may9, pages = 1, shade = TRUE, shade.col = "#B0A6C9")
+AIC(may9)
+
+
+may10 <- mgcv::gam(PA ~  s(bat, k = 5) +
+                    s(chlorMay, k = 5) +
+                    s(mldMay, k = 5) +
+                    s(sstMay, k = 5) +
+                    #s(Lat, k = 5) +
+                    s(Long, k = 5),
+                  family = "binomial",
+                  data = comp_df)
+summary(may10)
+plot(may10, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(may10)
+
+may11 <- mgcv::gam(PA ~  s(bat, k = 5) +
+                    s(chlorMay, k = 5) +
+                    s(mldMay, k = 5) +
+                    s(sstMay, k = 5) +
+                    s(Lat, k = 5),
+                    #s(Long, k = 5),
+                  family = "binomial",
+                  data = comp_df)
+summary(may11)
+plot(may11, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(may11)
+
+may4 <- mgcv::gam(PA ~  s(bat, k = 5) +
+                     s(chlorMay, k = 5) +
+                     #s(mldMay, k = 5) +
+                     #s(sstMay, k = 5) +
+                     s(Lat, k = 5) +
+                   s(Long, k = 5),
+                   family = "binomial",
+                   data = comp_df)
+summary(may4)
+plot(may4, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(may4)
+
+## June
+
+june <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                   s(chlorJune, k = 5) + 
+                   s(mldJune, k = 5) + 
+                   s(sstJune, k = 5) +
+                   s(Lat, k = 5) +
+                   s(Long, k = 5),
+                 family = "binomial",
+                 data = comp_df)
+summary(june)
+plot(june, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(apr, may, june)
+
+## July 
+
+July <- mgcv::gam(PA ~ s(bat, k = 5) + 
+                    s(chlorJuly, k = 5) + 
+                    s(mldJuly, k = 5) + 
+                    s(sstJuly, k = 5) +
+                    s(Lat, k = 5) +
+                    s(Long, k = 5),
+                  family = "binomial",
+                  data = comp_df)
+summary(July)
+plot(July, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
+AIC(apr, may, june, july)
 
 
 
@@ -506,4 +796,12 @@ write_csv(dataset, file = "final_df/datset_result_appendix.csv")
 
 
 
+
+
+
+
+
+
+
+                              
 

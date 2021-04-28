@@ -14,6 +14,7 @@ library(rasterVis)
 library(sp)
 library(mgcv)
 library(RColorBrewer)
+library(ggsn)
 
 # GRAPHIC THEME----
 
@@ -82,14 +83,20 @@ str(imp_locations)
    geom_label_repel(data = imp_locations, aes(x = long, y = lat,
                                               label = location),
                     box.padding = 5, size = 5, alpha = 0.9, nudge_y = -0.5,
-                    min.segment.length = 0, inherit.aes = FALSE) + 
+                    min.segment.length = 0, inherit.aes = FALSE) +
    ylim(63,68.03) +
    xlim(-27, -10) +
    labs(title = "", colour = "Survey Year", 
         x = "Longitude", y = "Latitude") + 
    coord_sf())
 
-#ggsave(site_map, file = "img/survey_final3.png", height = 5, width = 8)
+
+(site_map2 <- site_map +
+  ggsn::scalebar(data = ice_map,
+           transform = TRUE, dist = 100, dist_unit = "km", model='WGS84',
+           height = 0.03, location = "bottomright", anchor = c(x = -12.2, y = 63.3), st.dist = 0.06))
+
+#ggsave(site_map2, file = "img/survey_final4.png", height = 5, width = 8)
 
 ## SIGHTING X YEAR----
 
@@ -582,5 +589,11 @@ pal <- wes_palette("GrandBudapest2", 100, type = "continuous")
         x = "Longitude", 
         y ="Latitude")) # rotates x axis text
 
-ggsave(bat_plot_tot, file = "img/bathymethry.png", height = 5, width = 9)
+(bat_plot_tot2 <- bat_plot_tot +
+    ggsn::scalebar(data = bat_df,
+                   transform = TRUE, dist = 100, dist_unit = "km", model='WGS84',
+                   height = 0.2, location = "bottomright", 
+                   anchor = c(x = -10, y = 64.5), st.dist = 0.06))
+
+#ggsave(bat_plot_tot, file = "img/bathymethry.png", height = 5, width = 9)
 

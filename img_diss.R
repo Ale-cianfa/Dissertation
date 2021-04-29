@@ -280,12 +280,9 @@ chlor_0105 <- raster("Parameters/chlor_a/chlor_0105.tif")
 
 chlor_0105_df <- as.data.frame(chlor_0105, xy = TRUE, na.rm = TRUE)
 
-chlor_0105_df <- chlor_0105_df %>% 
-      filter(chlor_0105 < 20)
-  
 (chlor_01_05 <- ggplot() +
    geom_raster(data = chlor_0105_df, aes(x = x, y = y, fill = chlor_0105)) +
-   scale_fill_viridis_c(option = mako)+
+   scale_fill_viridis_c()+
    geom_point(data = survey_01, aes(x = lo2, y = la2), colour = "black", size = 0.5) +
    coord_quickmap() +
    ylim(64.5,68.5) +
@@ -324,10 +321,6 @@ chlor_0705_df <- as.data.frame(chlor_0705, xy = TRUE, na.rm = TRUE)
     labs(fill = "Chlorophyll-a \n(mg m-3)", 
          x = "Longitude", 
          y = "Latitude"))
-
-chlor_0705_df <- chlor_0705_df %>% 
-  filter(chlor_0705 < 37)
-
 
 ### Chlorophyll-a 2015----
 
@@ -503,7 +496,7 @@ mld_1505_df <- as.data.frame(mld_1505, xy = TRUE, na.rm = TRUE)
 
 
 ### facet for dynamic variables----
-library(ggpubr)
+#library(ggpubr)
 
 (variables <- ggarrange(sst_01_05, sst_07_052, sst_15_05,
                         chlor_01_05, chlor_07_05, chlor_15_05,
@@ -518,7 +511,7 @@ library(ggpubr)
 
 library(wesanderson)
 
-pal <- wes_palette("GrandBudapest2", 100, type = "continuous")
+#pal <- wes_palette("GrandBudapest2", 100, type = "continuous")
 
 
 (bat_plot_tot <- ggplot() +
@@ -547,4 +540,740 @@ pal <- wes_palette("GrandBudapest2", 100, type = "continuous")
 
 
 #ggsave(bat_plot_tot2, file = "img/bathymethry.png", height = 5, width = 9)
+
+# APPENDIX FACETS FOR VARIABLES----
+
+## APRIL----
+
+### Chlorophyll APRIL 2001----
+
+chlor_0104 <- raster("Parameters/chlor_a/chlor_0104.tif")
+
+## Creating a data frame for each year to show the progress in a facet plot
+
+chlor_0104_df <- as.data.frame(chlor_0104, xy = TRUE, na.rm = TRUE)
+
+
+(chlor_01_04 <- ggplot() +
+    geom_raster(data = chlor_0104_df, aes(x = x, y = y, fill = chlor_0104)) +
+    scale_fill_viridis_c()+
+    geom_point(data = survey_01, aes(x = lo2, y = la2), colour = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Chlorophyll-a \n(mg m-3)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### Chlorophyll APRIL 2007----
+
+chlor_0704 <- raster("Parameters/chlor_a/chlor_0704.tif")
+
+## Creating a data frame for each year to show the progress in a facet plot
+
+chlor_0704_df <- as.data.frame(chlor_0704, xy = TRUE, na.rm = TRUE)
+
+(chlor_07_04 <- ggplot() +
+    geom_raster(data = chlor_0704_df, aes(x = x, y = y, fill = chlor_0704)) +
+    scale_fill_viridis_c()+
+    geom_point(data = survey_07, aes(x = lo2, y = la2), colour = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Chlorophyll-a \n(mg m-3)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+
+### Chlorophyll APRIL 2015----
+
+chlor_1504 <- raster("Parameters/chlor_a/chlor_1504.tif")
+
+## Creating a data frame for each year to show the progress in a facet plot
+
+chlor_1504_df <- as.data.frame(chlor_1504, xy = TRUE, na.rm = TRUE)
+
+(chlor_15_04 <- ggplot() +
+    geom_raster(data = chlor_1504_df, aes(x = x, y = y, fill = chlor_1504)) +
+    scale_fill_viridis_c() +
+    geom_point(data = survey_15, aes(x = lo2, y = la2), colour = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Chlorophyll-a \n(mg m-3)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### SST 2001----
+
+sst_0104 <- raster("Parameters/analysed_sst/sst_0104.tif")
+
+sst_0104_df <- as.data.frame(sst_0104, xy = TRUE, na.rm = TRUE)
+
+(sst_01_04 <- ggplot() +
+    geom_raster(data = sst_0104_df, aes(x = x, y = y, fill = sst_0104)) +
+    scale_fill_viridis_c(option = "plasma", direction = 1)+
+    geom_point(data = survey_01, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Temperature (K)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### SST 2007----
+
+sst_0704 <- raster("Parameters/analysed_sst/sst_0704.tif")
+
+sst_0704_df <- as.data.frame(sst_0704, xy = TRUE, na.rm = TRUE)
+
+(sst_07_04 <- ggplot() +
+    geom_raster(data = sst_0704_df, aes(x = x, y = y, fill = sst_0704)) +
+    scale_fill_viridis_c(option = "plasma", direction = 1)+
+    geom_point(data = survey_07, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Temperature (K)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### SST 2015----
+
+sst_1504 <- raster("Parameters/analysed_sst/sst_1504.tif")
+
+sst_1504_df <- as.data.frame(sst_1504, xy = TRUE, na.rm = TRUE)
+
+(sst_15_04 <- ggplot() +
+    geom_raster(data = sst_1504_df, aes(x = x, y = y, fill = sst_1504)) +
+    scale_fill_viridis_c(option = "plasma", direction = 1)+
+    geom_point(data = survey_15, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Temperature (K)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+
+### MLD 2001----
+
+mld_0104 <- raster("Parameters/mlotst/mlotst_0104.tif")
+
+mld_0104_df <- as.data.frame(mld_0104, xy = TRUE, na.rm = TRUE)
+
+(mld_01_04 <- ggplot() +
+    geom_raster(data = mld_0104_df, aes(x = x, y = y, fill = mlotst_0104)) +
+    scale_fill_viridis_c(direction = -1)+
+    geom_point(data = survey_01, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Depth (m)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### MLD 2007----
+
+mld_0704 <- raster("Parameters/mlotst/mlotst_0704.tif")
+
+mld_0704_df <- as.data.frame(mld_0704, xy = TRUE, na.rm = TRUE)
+
+(mld_07_04 <- ggplot() +
+    geom_raster(data = mld_0704_df, aes(x = x, y = y, fill = mlotst_0704)) +
+    scale_fill_viridis_c(direction = -1)+
+    geom_point(data = survey_07, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Depth (m)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### MLD 2015----
+
+mld_1504 <- raster("Parameters/mlotst/mlotst_1504.tif")
+
+mld_1504_df <- as.data.frame(mld_1504, xy = TRUE, na.rm = TRUE)
+
+(mld_15_04 <- ggplot() +
+    geom_polygon(data = ice_map, aes(x = long, y = lat, group = group), fill = NA) +
+    geom_raster(data = mld_1504_df, aes(x = x, y = y, fill = mlotst_1504)) +
+    scale_fill_viridis_c(direction = -1)+
+    geom_point(data = survey_15, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Depth (m)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+(sst_07_042 <- sst_07_04 +
+    ggsn::scalebar(data = ice_map,
+                   transform = TRUE, dist = 100, dist_unit = "km", model='WGS84',
+                   height = 0.03, location = "topleft", anchor = c(x = -15.8, y = 68.2), 
+                   st.size = 3, st.dist = 0.08, st.color = "white"))
+
+
+### facet for april dynamic variables----
+#library(ggpubr)
+
+(variables <- ggarrange(sst_01_04, sst_07_042, sst_15_04,
+                        chlor_01_04, chlor_07_04, chlor_15_04,
+                        mld_01_04, mld_07_04, mld_15_04,
+                        labels = c("sst 2001", "sst 2007", "sst 2015",
+                                   "Chlorphyll 2001", "Chlorphyll 2007",
+                                   "Chlorphyll 2015", "MLD 2001", 
+                                   "MLD 2007", "MLD 2015"),
+                        ncol = 2, nrow = 5))
+
+#ggsave(variables, file = "img/variables_panel_april.png", height = 16, width = 12)
+
+
+
+## JUNE----
+
+### Chlorophyll JUNE 2001----
+
+chlor_0106 <- raster("Parameters/chlor_a/chlor_0106.tif")
+
+## Creating a data frame for each year to show the progress in a facet plot
+
+chlor_0106_df <- as.data.frame(chlor_0106, xy = TRUE, na.rm = TRUE)
+
+
+(chlor_01_06 <- ggplot() +
+    geom_raster(data = chlor_0106_df, aes(x = x, y = y, fill = chlor_0106)) +
+    scale_fill_viridis_c()+
+    geom_point(data = survey_01, aes(x = lo2, y = la2), colour = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Chlorophyll-a \n(mg m-3)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### Chlorophyll JUNE 2007----
+
+chlor_0706 <- raster("Parameters/chlor_a/chlor_0706.tif")
+
+## Creating a data frame for each year to show the progress in a facet plot
+
+chlor_0706_df <- as.data.frame(chlor_0706, xy = TRUE, na.rm = TRUE)
+
+(chlor_07_06 <- ggplot() +
+    geom_raster(data = chlor_0706_df, aes(x = x, y = y, fill = chlor_0706)) +
+    scale_fill_viridis_c()+
+    geom_point(data = survey_07, aes(x = lo2, y = la2), colour = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Chlorophyll-a \n(mg m-3)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+
+### Chlorophyll JUNE 2015----
+
+chlor_1506 <- raster("Parameters/chlor_a/chlor_1506.tif")
+
+## Creating a data frame for each year to show the progress in a facet plot
+
+chlor_1506_df <- as.data.frame(chlor_1506, xy = TRUE, na.rm = TRUE)
+
+(chlor_15_06 <- ggplot() +
+    geom_raster(data = chlor_1506_df, aes(x = x, y = y, fill = chlor_1506)) +
+    scale_fill_viridis_c() +
+    geom_point(data = survey_15, aes(x = lo2, y = la2), colour = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Chlorophyll-a \n(mg m-3)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### SST 2001----
+
+sst_0106 <- raster("Parameters/analysed_sst/sst_0106.tif")
+
+sst_0106_df <- as.data.frame(sst_0106, xy = TRUE, na.rm = TRUE)
+
+(sst_01_06 <- ggplot() +
+    geom_raster(data = sst_0106_df, aes(x = x, y = y, fill = sst_0106)) +
+    scale_fill_viridis_c(option = "plasma", direction = 1)+
+    geom_point(data = survey_01, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Temperature (K)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### SST 2007----
+
+sst_0706 <- raster("Parameters/analysed_sst/sst_0706.tif")
+
+sst_0706_df <- as.data.frame(sst_0706, xy = TRUE, na.rm = TRUE)
+
+(sst_07_06 <- ggplot() +
+    geom_raster(data = sst_0706_df, aes(x = x, y = y, fill = sst_0706)) +
+    scale_fill_viridis_c(option = "plasma", direction = 1)+
+    geom_point(data = survey_07, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Temperature (K)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### SST 2015----
+
+sst_1506 <- raster("Parameters/analysed_sst/sst_1506.tif")
+
+sst_1506_df <- as.data.frame(sst_1506, xy = TRUE, na.rm = TRUE)
+
+(sst_15_06 <- ggplot() +
+    geom_raster(data = sst_1506_df, aes(x = x, y = y, fill = sst_1506)) +
+    scale_fill_viridis_c(option = "plasma", direction = 1)+
+    geom_point(data = survey_15, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Temperature (K)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+
+### MLD 2001----
+
+mld_0106 <- raster("Parameters/mlotst/mlotst_0106.tif")
+
+mld_0106_df <- as.data.frame(mld_0106, xy = TRUE, na.rm = TRUE)
+
+(mld_01_06 <- ggplot() +
+    geom_raster(data = mld_0106_df, aes(x = x, y = y, fill = mlotst_0106)) +
+    scale_fill_viridis_c(direction = -1)+
+    geom_point(data = survey_01, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Depth (m)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### MLD 2007----
+
+mld_0706 <- raster("Parameters/mlotst/mlotst_0706.tif")
+
+mld_0706_df <- as.data.frame(mld_0706, xy = TRUE, na.rm = TRUE)
+
+(mld_07_06 <- ggplot() +
+    geom_raster(data = mld_0706_df, aes(x = x, y = y, fill = mlotst_0706)) +
+    scale_fill_viridis_c(direction = -1)+
+    geom_point(data = survey_07, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Depth (m)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### MLD 2015----
+
+mld_1506 <- raster("Parameters/mlotst/mlotst_1506.tif")
+
+mld_1506_df <- as.data.frame(mld_1506, xy = TRUE, na.rm = TRUE)
+
+(mld_15_06 <- ggplot() +
+    geom_polygon(data = ice_map, aes(x = long, y = lat, group = group), fill = NA) +
+    geom_raster(data = mld_1506_df, aes(x = x, y = y, fill = mlotst_1506)) +
+    scale_fill_viridis_c(direction = -1)+
+    geom_point(data = survey_15, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Depth (m)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+(sst_07_062 <- sst_07_06 +
+    ggsn::scalebar(data = ice_map,
+                   transform = TRUE, dist = 100, dist_unit = "km", model='WGS84',
+                   height = 0.03, location = "topleft", anchor = c(x = -15.8, y = 68.2), 
+                   st.size = 3, st.dist = 0.08, st.color = "white"))
+
+
+### facet for june dynamic variables----
+#library(ggpubr)
+
+(variables <- ggarrange(sst_01_06, sst_07_062, sst_15_06,
+                        chlor_01_06, chlor_07_06, chlor_15_06,
+                        mld_01_06, mld_07_06, mld_15_06,
+                        labels = c("sst 2001", "sst 2007", "sst 2015",
+                                   "Chlorphyll 2001", "Chlorphyll 2007",
+                                   "Chlorphyll 2015", "MLD 2001", 
+                                   "MLD 2007", "MLD 2015"),
+                        ncol = 2, nrow = 5))
+
+#ggsave(variables, file = "img/variables_panel_june.png", height = 16, width = 12)
+
+
+## JULY----
+
+### Chlorophyll JULY 2001----
+
+chlor_0106 <- raster("Parameters/chlor_a/chlor_0106.tif")
+
+## Creating a data frame for each year to show the progress in a facet plot
+
+chlor_0106_df <- as.data.frame(chlor_0106, xy = TRUE, na.rm = TRUE)
+
+
+(chlor_01_06 <- ggplot() +
+    geom_raster(data = chlor_0106_df, aes(x = x, y = y, fill = chlor_0106)) +
+    scale_fill_viridis_c()+
+    geom_point(data = survey_01, aes(x = lo2, y = la2), colour = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Chlorophyll-a \n(mg m-3)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### Chlorophyll JULY 2007----
+
+chlor_0706 <- raster("Parameters/chlor_a/chlor_0706.tif")
+
+## Creating a data frame for each year to show the progress in a facet plot
+
+chlor_0706_df <- as.data.frame(chlor_0706, xy = TRUE, na.rm = TRUE)
+
+(chlor_07_06 <- ggplot() +
+    geom_raster(data = chlor_0706_df, aes(x = x, y = y, fill = chlor_0706)) +
+    scale_fill_viridis_c()+
+    geom_point(data = survey_07, aes(x = lo2, y = la2), colour = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Chlorophyll-a \n(mg m-3)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+
+### Chlorophyll JULY 2015----
+
+chlor_1506 <- raster("Parameters/chlor_a/chlor_1506.tif")
+
+## Creating a data frame for each year to show the progress in a facet plot
+
+chlor_1506_df <- as.data.frame(chlor_1506, xy = TRUE, na.rm = TRUE)
+
+(chlor_15_06 <- ggplot() +
+    geom_raster(data = chlor_1506_df, aes(x = x, y = y, fill = chlor_1506)) +
+    scale_fill_viridis_c() +
+    geom_point(data = survey_15, aes(x = lo2, y = la2), colour = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Chlorophyll-a \n(mg m-3)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### SST 2001----
+
+sst_0106 <- raster("Parameters/analysed_sst/sst_0106.tif")
+
+sst_0106_df <- as.data.frame(sst_0106, xy = TRUE, na.rm = TRUE)
+
+(sst_01_06 <- ggplot() +
+    geom_raster(data = sst_0106_df, aes(x = x, y = y, fill = sst_0106)) +
+    scale_fill_viridis_c(option = "plasma", direction = 1)+
+    geom_point(data = survey_01, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Temperature (K)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### SST 2007----
+
+sst_0706 <- raster("Parameters/analysed_sst/sst_0706.tif")
+
+sst_0706_df <- as.data.frame(sst_0706, xy = TRUE, na.rm = TRUE)
+
+(sst_07_06 <- ggplot() +
+    geom_raster(data = sst_0706_df, aes(x = x, y = y, fill = sst_0706)) +
+    scale_fill_viridis_c(option = "plasma", direction = 1)+
+    geom_point(data = survey_07, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Temperature (K)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### SST 2015----
+
+sst_1506 <- raster("Parameters/analysed_sst/sst_1506.tif")
+
+sst_1506_df <- as.data.frame(sst_1506, xy = TRUE, na.rm = TRUE)
+
+(sst_15_06 <- ggplot() +
+    geom_raster(data = sst_1506_df, aes(x = x, y = y, fill = sst_1506)) +
+    scale_fill_viridis_c(option = "plasma", direction = 1)+
+    geom_point(data = survey_15, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Temperature (K)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+
+### MLD 2001----
+
+mld_0106 <- raster("Parameters/mlotst/mlotst_0106.tif")
+
+mld_0106_df <- as.data.frame(mld_0106, xy = TRUE, na.rm = TRUE)
+
+(mld_01_06 <- ggplot() +
+    geom_raster(data = mld_0106_df, aes(x = x, y = y, fill = mlotst_0106)) +
+    scale_fill_viridis_c(direction = -1)+
+    geom_point(data = survey_01, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Depth (m)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### MLD 2007----
+
+mld_0706 <- raster("Parameters/mlotst/mlotst_0706.tif")
+
+mld_0706_df <- as.data.frame(mld_0706, xy = TRUE, na.rm = TRUE)
+
+(mld_07_06 <- ggplot() +
+    geom_raster(data = mld_0706_df, aes(x = x, y = y, fill = mlotst_0706)) +
+    scale_fill_viridis_c(direction = -1)+
+    geom_point(data = survey_07, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Depth (m)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+### MLD 2015----
+
+mld_1506 <- raster("Parameters/mlotst/mlotst_1506.tif")
+
+mld_1506_df <- as.data.frame(mld_1506, xy = TRUE, na.rm = TRUE)
+
+(mld_15_06 <- ggplot() +
+    geom_polygon(data = ice_map, aes(x = long, y = lat, group = group), fill = NA) +
+    geom_raster(data = mld_1506_df, aes(x = x, y = y, fill = mlotst_1506)) +
+    scale_fill_viridis_c(direction = -1)+
+    geom_point(data = survey_15, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Depth (m)", 
+         x = "Longitude", 
+         y = "Latitude"))
+
+(sst_07_062 <- sst_07_06 +
+    ggsn::scalebar(data = ice_map,
+                   transform = TRUE, dist = 100, dist_unit = "km", model='WGS84',
+                   height = 0.03, location = "topleft", anchor = c(x = -15.8, y = 68.2), 
+                   st.size = 3, st.dist = 0.08, st.color = "white"))
+
+
+### facet for JULY dynamic variables----
+#library(ggpubr)
+
+(variables <- ggarrange(sst_01_06, sst_07_062, sst_15_06,
+                        chlor_01_06, chlor_07_06, chlor_15_06,
+                        mld_01_06, mld_07_06, mld_15_06,
+                        labels = c("sst 2001", "sst 2007", "sst 2015",
+                                   "Chlorphyll 2001", "Chlorphyll 2007",
+                                   "Chlorphyll 2015", "MLD 2001", 
+                                   "MLD 2007", "MLD 2015"),
+                        ncol = 2, nrow = 5))
+
+ggsave(variables, file = "img/variables_panel_JULY.png", height = 16, width = 12)
+
+
+
+
+
+
+
+
+
+
+
 

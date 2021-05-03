@@ -153,12 +153,12 @@ comp_2015
 comp_df <- rbind(comp_2001, comp_2007, comp_2015) #you have to make sure to save them in the right order otherwise the name do not match
 
 comp_df <- comp_df %>% 
-  drop_na() 
-  #dplyr::select(-c(mldAug, sstAug, sstMarch, 
-            #mldMarch, chlorAug, chlorMarch))#remov ed all NAs from the dataframe (around 200 rows!)
+  drop_na() %>% 
+  dplyr::select(-c(mldAug, sstAug, sstMarch, 
+            mldMarch, chlorAug, chlorMarch))
 
 #comp_df$year <- as.factor(comp_df$year)
-#write.csv(comp_df, file = "final_df/complete_data.csv")
+write.csv(comp_df, file = "final_df/complete_data.csv")
 
 #IT WORKED!! 
 
@@ -617,7 +617,7 @@ AIC(aug_e_1)
 fixed <- mgcv::gam(PA ~ s(bat, k = 5) +
                                 s(Lat, k = 5) +
                                 s(Long, k = 5),
-                              family = "binomial",
+                              family = binomial(link = "logit"),
                               data = comp_df)
 summary(fixed)
 

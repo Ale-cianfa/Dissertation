@@ -553,19 +553,27 @@ may_e_1 <- mgcv::gam(PA ~ s(chlorMay, k = 5) +
                        data = comp_df)
 summary(may_e_1)
 
-plot(may_e_1, pages = 1, trans = plogis, scale = 0, shade = TRUE, shade.col = "#B3C6B3")
 
-plot(may_e_1, select = 1, ylab = "s(Chlorophyll, 1)", xlab = "Chlorophyll (mg m-3)", trans = plogis, scale = 0, shade = TRUE, shade.col = "#B3C6B3")
+plot(may_e_1, pages = 1)
 
 par(mfrow=c(2, 2)) 
-plot(may_e_1, select = 1, ylab = "s(Chlorophyll, 1)", xlab = "Chlorophyll (mg m-3)", trans = plogis, scale = 0, shade = TRUE, shade.col = "#B3C6B3")
+plot(may_e_1, select = 1, 
+     ylab = "s(Chlorophyll, 1)", 
+     xlab = "Chlorophyll (mg m-3)",
+     rans = plogis, scale = 0, 
+     shade = TRUE, shade.col = "#B3C6B3")
 
 plot(may_e_1, select = 2, 
      ylab = "s(MLD, 2.65)",
      xlab = "Mixed Layer Depth (m)", 
-     trans = plogis, scale = 0, shade = TRUE, shade.col = "#B3C6B3")
+     trans = plogis, scale = 0, 
+     shade = TRUE, shade.col = "#B3C6B3")
 
-plot(may_e_1, select = 3, ylab = "s(SST, 3.87)", xlab = "Sea Surface Temperature (K)",trans = plogis, scale = 0, shade = TRUE, shade.col = "#B3C6B3")
+plot(may_e_1, select = 3, 
+     ylab = "s(SST, 3.87)", 
+     xlab = "Sea Surface Temperature (K)",
+     trans = plogis, scale = 0, 
+     shade = TRUE, shade.col = "#B3C6B3")
 
 
 AIC(may_e_1)
@@ -622,6 +630,28 @@ fixed <- mgcv::gam(PA ~ s(bat, k = 5) +
 summary(fixed)
 
 plot(fixed, pages = 1, scale = 0, residuals = FALSE, shade = TRUE, shade.col = "#C4979C")
+
+par(mfrow=c(2, 2)) 
+plot(fixed, select = 1, 
+     ylab = "s(Depth, 2.6)", 
+     xlab = "Depth (m)", 
+     scale = 0, shade = TRUE, 
+     shade.col = "#C4979C")
+
+plot(fixed, select = 2, 
+     ylab = "s(Latitude, 2.81)",
+     xlab = "Latitude", 
+     scale = 0, shade = TRUE, 
+     shade.col = "#C4979C")
+
+plot(fixed, select = 3, 
+     ylab = "s(Longitude, 4)", 
+     xlab = "Longitude",
+     scale = 0, 
+     shade = TRUE, 
+     shade.col = "#C4979C")
+
+
 
 AIC(fixed)
 

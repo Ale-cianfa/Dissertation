@@ -137,7 +137,7 @@ comp_2007 <- comp_2007 %>%
 ```
 ```
 ## 2015:
-comp_2015 <- read.csv("final_df/by_year/2015_final_df2.csv") #MISSING LAT LONG!!
+comp_2015 <- read.csv("final_df/by_year/2015_final_df2.csv")
 
 str(comp_2015)
 

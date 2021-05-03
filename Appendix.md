@@ -1,4 +1,4 @@
-Appendix 1: Code for Site Map
+**Appendix 1: Code for Site Map**
 ```
 ## Importing World map 
 world <- map_data("world")
@@ -68,7 +68,7 @@ str(imp_locations)
            anchor = c(x = -12.2, y = 63.3), st.dist = 0.06))
 ```
 
-Appendix 2: Code used to filter and prepare the data for the QGIS analysis
+**Appendix 2: Code used to filter and prepare the data for the QGIS analysis**
 
 ```
 survey <- read.csv("NASS/original/orignal_ale_nass-sightings_tot.csv") #reading survey
@@ -104,7 +104,7 @@ survey_15 <- survey %>%
 
 write_csv(survey_15, file = "NASS/intermediate surveys/by_year/survey_15.csv")
 ```
-Appendix 3: Joining the different Presence/Absence dataframes in R
+**Appendix 3: Joining the different Presence/Absence dataframes in R**
 ```
 ## 2001:
 comp_2001 <- read.csv("final_df/by_year/2001_final_ds.csv")
@@ -187,7 +187,7 @@ comp_df <- rbind(comp_2001, comp_2007, comp_2015)
 comp_df <- comp_df %>% 
   drop_na() 
 ```
-Appendix 4: Correlation Analysis between variables
+**Appendix 4: Correlation Analysis between variables**
 ```
 library(DataExplorer)
 
@@ -225,7 +225,7 @@ gam_june_9 <- mgcv::gam(PA ~ s(bat, k = 5) +
                         data = comp_df)
 ```                   
 
-Appendix 5: Example of GAM code
+**Appendix 5: Example of GAM code**
 
 ``` 
 gam <- mgcv::gam(PA ~ s(bat, k = 5) + 

@@ -106,94 +106,83 @@ write_csv(survey_15, file = "NASS/intermediate surveys/by_year/survey_15.csv")
 ```
 Appendix 3: Joining the different Presence/Absence dataframes in R
 ```
-### 2001:
+## 2001:
 comp_2001 <- read.csv("final_df/by_year/2001_final_ds.csv")
 
 str(comp_2001)
 
 comp_2001 <- comp_2001 %>% 
-  rename(chlorMarch = chlor_0103, chlorApril = chlor_0104, 
+  rename(chlorApril = chlor_0104, 
          chlorMay = chlor_0105, chlorJune = chlor_0106, 
-         chlorJuly = chlor_0107, chlorAug = chlor_0108,
-         mldMarch = mlotst_103, mldApril = mlotst_104,
+         chlorJuly = chlor_0107,mldApril = mlotst_104,
          mldMay = mlotst_105, mldJune = mlotst_106, 
-         mldJuly = mlotst_107, mldAug = mlotst_108, 
-         sstMarch = sst_0103, sstApril = sst_0104,
+         mldJuly = mlotst_107, sstApril = sst_0104,
          sstMay = sst_0105, sstJune = sst_0106, 
-         sstJuly = sst_0107, sstAug = sst_0108)
-
-#comp_2001$year <- 2001
-  
-
-### 2007:
+         sstJuly = sst_0107)
+```
+```
+## 2007:
 comp_2007 <- read.csv("final_df/by_year/2007_final_ds.csv")
 
 str(comp_2007)
 
 comp_2007 <- comp_2007 %>% 
-  rename(chlorMarch = chlor_0703, chlorApril = chlor_0704, 
+  rename(chlorApril = chlor_0704, 
          chlorMay = chlor_0705, chlorJune = chlor_0706, 
-         chlorJuly = chlor_0707, chlorAug = chlor_0708,
-         mldMarch = mlotst_703, mldApril = mlotst_704,
+         chlorJuly = chlor_0707, mldApril = mlotst_704,
          mldMay = mlotst_705, mldJune = mlotst_706, 
-         mldJuly = mlotst_707, mldAug = mlotst_708, 
-         sstMarch = sst_0703, sstApril = sst_0704,
+         mldJuly = mlotst_707, sstApril = sst_0704,
          sstMay = sst_0705, sstJune = sst_0706, 
-         sstJuly = sst_0707, sstAug = sst_0708)
-
-#comp_2007$year <- 2007
-
-### 2015:
+         sstJuly = sst_0707)
+```
+```
+## 2015:
 comp_2015 <- read.csv("final_df/by_year/2015_final_df2.csv") #MISSING LAT LONG!!
 
 str(comp_2015)
 
 comp_2015 <- comp_2015 %>% 
-  rename(chlorMarch = chlor_1503, chlorApril = chlor_1504, 
+  rename(chlorApril = chlor_1504, 
          chlorMay = chlor_1505, chlorJune = chlor_1506, 
-         chlorJuly = chlor_1507, chlorAug = chlor_1508,
-         mldMarch = mlotst_153, mldApril = mlotst_154,
+         chlorJuly = chlor_1507, mldApril = mlotst_154,
          mldMay = mlotst_155, mldJune = mlotst_156, 
-         mldJuly = mlotst_157, mldAug = mlotst_158, 
-         sstMarch = sst_1503, sstApril = sst_1504,
+         mldJuly = mlotst_157, sstApril = sst_1504,
          sstMay = sst_1505, sstJune = sst_1506, 
-         sstJuly = sst_1507, sstAug = sst_1508) 
+         sstJuly = sst_1507) 
+```
+```
+# Changing column order
 
-#comp_2015$year <- 2015
-
-
-## CHANGING ORDER OF COLUMNS:----
-
-### 2001: 
+## 2001: 
 
 colnames(comp_2001) #printing out the column names
 
-col_order <- c("fid", "PA", "Lat", "Long", "bat", "mldAug", 
-"mldJuly", "mldJune", "mldMay", "mldApril", "mldMarch",
-"sstAug", "sstJuly", "sstJune", "sstMay", "sstApril", 
-"sstMarch", "chlorAug", "chlorJuly", "chlorJune",
-"chlorMay", "chlorApril", "chlorMarch")   
+col_order <- c("fid", "PA", "Lat", "Long", "bat", 
+"mldJuly", "mldJune", "mldMay", "mldApril",
+"sstJuly", "sstJune", "sstMay", "sstApril", 
+"chlorJuly", "chlorJune",
+"chlorMay", "chlorApril")   
 
 comp_2001 <- comp_2001[, col_order]
 comp_2001
 
-### 2007: 
+## 2007: 
 
 colnames(comp_2007)
 
-comp_2007 <- comp_2007[, col_order] #since the order is the same i should be able to reuse it
+comp_2007 <- comp_2007[, col_order] 
 comp_2007
 
-### 2015: 
+## 2015: 
 
 colnames(comp_2015) 
 
 comp_2015 <- comp_2015[, col_order]
 comp_2015
 
-## CREATING ONE BIG DATA FRAME:----
+## Creating a final dataframe: 
 
-comp_df <- rbind(comp_2001, comp_2007, comp_2015) #you have to make sure to save them in the right order otherwise the name do not match
+comp_df <- rbind(comp_2001, comp_2007, comp_2015)
 
 comp_df <- comp_df %>% 
   drop_na() 
@@ -236,7 +225,7 @@ gam_june_9 <- mgcv::gam(PA ~ s(bat, k = 5) +
                         data = comp_df)
 ```                   
 
-Appendix Intro --> general GAM
+Appendix 5: Example of GAM code
 
 ``` 
 gam <- mgcv::gam(PA ~ s(bat, k = 5) + 

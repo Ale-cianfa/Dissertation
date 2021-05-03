@@ -553,12 +553,27 @@ may_e_1 <- mgcv::gam(PA ~ s(chlorMay, k = 5) +
                        data = comp_df)
 summary(may_e_1)
 
-plot(may_e_1, pages = 1, shade = TRUE, shade.col = "#B3C6B3")
+plot(may_e_1, pages = 1, trans = plogis, scale = 0, shade = TRUE, shade.col = "#B3C6B3")
+
+plot(may_e_1, select = 1, ylab = "s(Chlorophyll, 1)", xlab = "Chlorophyll (mg m-3)", trans = plogis, scale = 0, shade = TRUE, shade.col = "#B3C6B3")
+
+par(mfrow=c(2, 2)) 
+plot(may_e_1, select = 1, ylab = "s(Chlorophyll, 1)", xlab = "Chlorophyll (mg m-3)", trans = plogis, scale = 0, shade = TRUE, shade.col = "#B3C6B3")
+
+plot(may_e_1, select = 2, 
+     ylab = "s(MLD, 2.65)",
+     xlab = "Mixed Layer Depth (m)", 
+     trans = plogis, scale = 0, shade = TRUE, shade.col = "#B3C6B3")
+
+plot(may_e_1, select = 3, ylab = "s(SST, 3.87)", xlab = "Sea Surface Temperature (K)",trans = plogis, scale = 0, shade = TRUE, shade.col = "#B3C6B3")
+
 
 AIC(may_e_1)
 
+
+
 ## June
-june_e_1 <- mgcv::gam(PA ~ s(bat, k = 5) +
+june_e_1 <- mgcv::gam(PA ~ #s(bat, k = 5) +
                        s(chlorJune, k = 5) + 
                        s(mldJune, k = 5) + 
                        s(sstJune, k = 5),
@@ -571,7 +586,7 @@ plot(june_e_1, pages = 1, residuals = FALSE, shade = TRUE, shade.col = "lightblu
 AIC(june_e_1)
 
 ## July
-july_e_1 <- mgcv::gam(PA ~ s(bat, k = 5) +
+july_e_1 <- mgcv::gam(PA ~ #s(bat, k = 5) +
                         s(chlorJuly, k = 5) + 
                         s(mldJuly, k = 5) + 
                         s(sstJuly, k = 5),
@@ -585,7 +600,7 @@ AIC(july_e_1)
 
 #AUgust
 
-aug_e_1 <- mgcv::gam(PA ~ s(bat, k = 5) +
+aug_e_1 <- mgcv::gam(PA ~ #s(bat, k = 5) +
                         s(chlorAug, k = 5) + 
                         s(mldAug, k = 5) + 
                         s(sstAug, k = 5),
@@ -606,7 +621,7 @@ fixed <- mgcv::gam(PA ~ s(bat, k = 5) +
                               data = comp_df)
 summary(fixed)
 
-plot(fixed, pages = 1, residuals = FALSE, shade = TRUE, shade.col = "#C4979C")
+plot(fixed, pages = 1, scale = 0, residuals = FALSE, shade = TRUE, shade.col = "#C4979C")
 
 AIC(fixed)
 
@@ -714,6 +729,8 @@ summary(may8)
 plot(may8, pages = 1, residuals = TRUE, shade = TRUE, shade.col = "lightblue")
 AIC(may8)
 
+## BEST MODEL----
+library(gratia)
 
 may9 <- mgcv::gam(PA ~
                     s(chlorMay, k = 5) +
@@ -724,9 +741,61 @@ may9 <- mgcv::gam(PA ~
                   family = "binomial",
                   data = comp_df)
 summary(may9)
-plot(may9, pages = 1, shade = TRUE, shade.col = "#B0A6C9")
+plot(may9, pages = 1, scale = 0, shade = TRUE, shade.col = "#B0A6C9")
 AIC(may9)
 
+par(mfrow=c(2, 3)) 
+plot(may9, select = 1, ylab = "s(Chlorophyll, 1)",
+     xlab = "Chlorophyll (mg m-3)", scale = 0, shade = TRUE, shade.col = "#B0A6C9")
+
+plot(may9, select = 2, 
+     ylab = "s(MLD, 3.17)",
+     xlab = "Mixed Layer Depth (m)",
+     scale = 0, shade = TRUE, shade.col = "#B0A6C9")
+
+plot(may9, select = 3, ylab = "s(SST, 3.98)", 
+     xlab = "Sea Surface Temperature (K)", scale = 0, 
+     shade = TRUE, shade.col = "#B0A6C9")
+
+plot(may9, select = 4, ylab = "s(Latitude, 2.51)", 
+     xlab = "Latitude", scale = 0, 
+     shade = TRUE, shade.col = "#B0A6C9")
+
+plot(may9, select = 5, ylab = "s(Longitude, 3.86)", 
+     xlab = "Longitude", scale = 0, 
+     shade = TRUE, shade.col = "#B0A6C9")
+
+
+
+
+## DEVIANCE EXPLAINED BY EACH PARAMETER: 
+maydev <- mgcv::gam(PA ~  s(bat, k = 5),family = "binomial",
+                    data = comp_df)
+summary(maydev)
+
+maychl <- mgcv::gam(PA ~  s(chlorMay, k = 5),family = "binomial",
+                    data = comp_df)
+summary(maychl)
+
+matmld <- mgcv::gam(PA ~  s(mldMay, k = 5),family = "binomial",
+                    data = comp_df)
+summary(matmld)
+
+maysst <- mgcv::gam(PA ~  s(sstMay, k = 5),family = "binomial",
+                    data = comp_df)
+summary(maysst)
+
+lat <- mgcv::gam(PA ~  s(Lat, k = 5),family = "binomial",
+                 data = comp_df)
+summary(lat)
+
+long <- mgcv::gam(PA ~  s(Long, k = 5),family = "binomial",
+               data = comp_df)
+summary(long)
+
+b0<- mgcv::gam(PA ~ 1, family = "binomial",
+               data = comp_df)
+summary(b0)
 
 may10 <- mgcv::gam(PA ~  s(bat, k = 5) +
                     s(chlorMay, k = 5) +

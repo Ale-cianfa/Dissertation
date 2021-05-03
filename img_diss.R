@@ -13,7 +13,6 @@ library(rgdal)
 library(rasterVis)
 library(sp)
 library(mgcv)
-library(RColorBrewer)
 library(ggsn)
 
 # GRAPHIC THEME----
@@ -279,6 +278,7 @@ chlor_0105 <- raster("Parameters/chlor_a/chlor_0105.tif")
 ## Creating a data frame for each year to show the progress in a facet plot
 
 chlor_0105_df <- as.data.frame(chlor_0105, xy = TRUE, na.rm = TRUE)
+
 
 (chlor_01_05 <- ggplot() +
    geom_raster(data = chlor_0105_df, aes(x = x, y = y, fill = chlor_0105)) +
@@ -1030,15 +1030,15 @@ mld_1506_df <- as.data.frame(mld_1506, xy = TRUE, na.rm = TRUE)
 
 ### Chlorophyll JULY 2001----
 
-chlor_0106 <- raster("Parameters/chlor_a/chlor_0106.tif")
+chlor_0107 <- raster("Parameters/chlor_a/chlor_0107.tif")
 
 ## Creating a data frame for each year to show the progress in a facet plot
 
-chlor_0106_df <- as.data.frame(chlor_0106, xy = TRUE, na.rm = TRUE)
+chlor_0107_df <- as.data.frame(chlor_0107, xy = TRUE, na.rm = TRUE)
 
 
-(chlor_01_06 <- ggplot() +
-    geom_raster(data = chlor_0106_df, aes(x = x, y = y, fill = chlor_0106)) +
+(chlor_01_07 <- ggplot() +
+    geom_raster(data = chlor_0107_df, aes(x = x, y = y, fill = chlor_0107)) +
     scale_fill_viridis_c()+
     geom_point(data = survey_01, aes(x = lo2, y = la2), colour = "black", size = 0.5) +
     coord_quickmap() +
@@ -1056,14 +1056,14 @@ chlor_0106_df <- as.data.frame(chlor_0106, xy = TRUE, na.rm = TRUE)
 
 ### Chlorophyll JULY 2007----
 
-chlor_0706 <- raster("Parameters/chlor_a/chlor_0706.tif")
+chlor_0707 <- raster("Parameters/chlor_a/chlor_0707.tif")
 
 ## Creating a data frame for each year to show the progress in a facet plot
 
-chlor_0706_df <- as.data.frame(chlor_0706, xy = TRUE, na.rm = TRUE)
+chlor_0707_df <- as.data.frame(chlor_0707, xy = TRUE, na.rm = TRUE)
 
-(chlor_07_06 <- ggplot() +
-    geom_raster(data = chlor_0706_df, aes(x = x, y = y, fill = chlor_0706)) +
+(chlor_07_07 <- ggplot() +
+    geom_raster(data = chlor_0707_df, aes(x = x, y = y, fill = chlor_0707)) +
     scale_fill_viridis_c()+
     geom_point(data = survey_07, aes(x = lo2, y = la2), colour = "black", size = 0.5) +
     coord_quickmap() +
@@ -1082,14 +1082,14 @@ chlor_0706_df <- as.data.frame(chlor_0706, xy = TRUE, na.rm = TRUE)
 
 ### Chlorophyll JULY 2015----
 
-chlor_1506 <- raster("Parameters/chlor_a/chlor_1506.tif")
+chlor_1507 <- raster("Parameters/chlor_a/chlor_1507.tif")
 
 ## Creating a data frame for each year to show the progress in a facet plot
 
-chlor_1506_df <- as.data.frame(chlor_1506, xy = TRUE, na.rm = TRUE)
+chlor_1507_df <- as.data.frame(chlor_1507, xy = TRUE, na.rm = TRUE)
 
-(chlor_15_06 <- ggplot() +
-    geom_raster(data = chlor_1506_df, aes(x = x, y = y, fill = chlor_1506)) +
+(chlor_15_07 <- ggplot() +
+    geom_raster(data = chlor_1507_df, aes(x = x, y = y, fill = chlor_1507)) +
     scale_fill_viridis_c() +
     geom_point(data = survey_15, aes(x = lo2, y = la2), colour = "black", size = 0.5) +
     coord_quickmap() +
@@ -1107,12 +1107,12 @@ chlor_1506_df <- as.data.frame(chlor_1506, xy = TRUE, na.rm = TRUE)
 
 ### SST 2001----
 
-sst_0106 <- raster("Parameters/analysed_sst/sst_0106.tif")
+sst_0107 <- raster("Parameters/analysed_sst/sst_0107.tif")
 
-sst_0106_df <- as.data.frame(sst_0106, xy = TRUE, na.rm = TRUE)
+sst_0107_df <- as.data.frame(sst_0107, xy = TRUE, na.rm = TRUE)
 
-(sst_01_06 <- ggplot() +
-    geom_raster(data = sst_0106_df, aes(x = x, y = y, fill = sst_0106)) +
+(sst_01_07 <- ggplot() +
+    geom_raster(data = sst_0107_df, aes(x = x, y = y, fill = sst_0107)) +
     scale_fill_viridis_c(option = "plasma", direction = 1)+
     geom_point(data = survey_01, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
     coord_quickmap() +
@@ -1130,12 +1130,12 @@ sst_0106_df <- as.data.frame(sst_0106, xy = TRUE, na.rm = TRUE)
 
 ### SST 2007----
 
-sst_0706 <- raster("Parameters/analysed_sst/sst_0706.tif")
+sst_0707 <- raster("Parameters/analysed_sst/sst_0707.tif")
 
-sst_0706_df <- as.data.frame(sst_0706, xy = TRUE, na.rm = TRUE)
+sst_0707_df <- as.data.frame(sst_0707, xy = TRUE, na.rm = TRUE)
 
-(sst_07_06 <- ggplot() +
-    geom_raster(data = sst_0706_df, aes(x = x, y = y, fill = sst_0706)) +
+(sst_07_07 <- ggplot() +
+    geom_raster(data = sst_0707_df, aes(x = x, y = y, fill = sst_0707)) +
     scale_fill_viridis_c(option = "plasma", direction = 1)+
     geom_point(data = survey_07, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
     coord_quickmap() +
@@ -1153,12 +1153,12 @@ sst_0706_df <- as.data.frame(sst_0706, xy = TRUE, na.rm = TRUE)
 
 ### SST 2015----
 
-sst_1506 <- raster("Parameters/analysed_sst/sst_1506.tif")
+sst_1507 <- raster("Parameters/analysed_sst/sst_1507.tif")
 
-sst_1506_df <- as.data.frame(sst_1506, xy = TRUE, na.rm = TRUE)
+sst_1507_df <- as.data.frame(sst_1507, xy = TRUE, na.rm = TRUE)
 
-(sst_15_06 <- ggplot() +
-    geom_raster(data = sst_1506_df, aes(x = x, y = y, fill = sst_1506)) +
+(sst_15_07 <- ggplot() +
+    geom_raster(data = sst_1507_df, aes(x = x, y = y, fill = sst_1507)) +
     scale_fill_viridis_c(option = "plasma", direction = 1)+
     geom_point(data = survey_15, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
     coord_quickmap() +
@@ -1177,12 +1177,12 @@ sst_1506_df <- as.data.frame(sst_1506, xy = TRUE, na.rm = TRUE)
 
 ### MLD 2001----
 
-mld_0106 <- raster("Parameters/mlotst/mlotst_0106.tif")
+mld_0107 <- raster("Parameters/mlotst/mlotst_0107.tif")
 
-mld_0106_df <- as.data.frame(mld_0106, xy = TRUE, na.rm = TRUE)
+mld_0107_df <- as.data.frame(mld_0107, xy = TRUE, na.rm = TRUE)
 
-(mld_01_06 <- ggplot() +
-    geom_raster(data = mld_0106_df, aes(x = x, y = y, fill = mlotst_0106)) +
+(mld_01_07 <- ggplot() +
+    geom_raster(data = mld_0107_df, aes(x = x, y = y, fill = mlotst_0107)) +
     scale_fill_viridis_c(direction = -1)+
     geom_point(data = survey_01, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
     coord_quickmap() +
@@ -1200,12 +1200,12 @@ mld_0106_df <- as.data.frame(mld_0106, xy = TRUE, na.rm = TRUE)
 
 ### MLD 2007----
 
-mld_0706 <- raster("Parameters/mlotst/mlotst_0706.tif")
+mld_0707 <- raster("Parameters/mlotst/mlotst_0707.tif")
 
-mld_0706_df <- as.data.frame(mld_0706, xy = TRUE, na.rm = TRUE)
+mld_0707_df <- as.data.frame(mld_0707, xy = TRUE, na.rm = TRUE)
 
-(mld_07_06 <- ggplot() +
-    geom_raster(data = mld_0706_df, aes(x = x, y = y, fill = mlotst_0706)) +
+(mld_07_07 <- ggplot() +
+    geom_raster(data = mld_0707_df, aes(x = x, y = y, fill = mlotst_0707)) +
     scale_fill_viridis_c(direction = -1)+
     geom_point(data = survey_07, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
     coord_quickmap() +
@@ -1223,13 +1223,13 @@ mld_0706_df <- as.data.frame(mld_0706, xy = TRUE, na.rm = TRUE)
 
 ### MLD 2015----
 
-mld_1506 <- raster("Parameters/mlotst/mlotst_1506.tif")
+mld_1507 <- raster("Parameters/mlotst/mlotst_1507.tif")
 
-mld_1506_df <- as.data.frame(mld_1506, xy = TRUE, na.rm = TRUE)
+mld_1507_df <- as.data.frame(mld_1507, xy = TRUE, na.rm = TRUE)
 
-(mld_15_06 <- ggplot() +
+(mld_15_07 <- ggplot() +
     geom_polygon(data = ice_map, aes(x = long, y = lat, group = group), fill = NA) +
-    geom_raster(data = mld_1506_df, aes(x = x, y = y, fill = mlotst_1506)) +
+    geom_raster(data = mld_1507_df, aes(x = x, y = y, fill = mlotst_1507)) +
     scale_fill_viridis_c(direction = -1)+
     geom_point(data = survey_15, aes(x = lo2, y = la2), fill = "black", size = 0.5) +
     coord_quickmap() +
@@ -1245,7 +1245,7 @@ mld_1506_df <- as.data.frame(mld_1506, xy = TRUE, na.rm = TRUE)
          x = "Longitude", 
          y = "Latitude"))
 
-(sst_07_062 <- sst_07_06 +
+(sst_07_072 <- sst_07_07 +
     ggsn::scalebar(data = ice_map,
                    transform = TRUE, dist = 100, dist_unit = "km", model='WGS84',
                    height = 0.03, location = "topleft", anchor = c(x = -15.8, y = 68.2), 
@@ -1255,9 +1255,9 @@ mld_1506_df <- as.data.frame(mld_1506, xy = TRUE, na.rm = TRUE)
 ### facet for JULY dynamic variables----
 #library(ggpubr)
 
-(variables <- ggarrange(sst_01_06, sst_07_062, sst_15_06,
-                        chlor_01_06, chlor_07_06, chlor_15_06,
-                        mld_01_06, mld_07_06, mld_15_06,
+(variables <- ggarrange(sst_01_07, sst_07_072, sst_15_07,
+                        chlor_01_07, chlor_07_07, chlor_15_07,
+                        mld_01_07, mld_07_07, mld_15_07,
                         labels = c("sst 2001", "sst 2007", "sst 2015",
                                    "Chlorphyll 2001", "Chlorphyll 2007",
                                    "Chlorphyll 2015", "MLD 2001", 
@@ -1269,11 +1269,65 @@ ggsave(variables, file = "img/variables_panel_JULY.png", height = 16, width = 12
 
 
 
+chlor_0103 <- raster("Parameters/chlor_a/chlor_0103.tif")
+chlor_0103_df <- as.data.frame(chlor_0103, xy = TRUE, na.rm = TRUE)
 
+(chlor_01_03 <- ggplot() +
+    geom_raster(data = chlor_0103_df, aes(x = x, y = y, fill = chlor_0103)) +
+    scale_fill_viridis_c()+
+    geom_point(data = survey_01, aes(x = lo2, y = la2), colour = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Chlorophyll-a \n(mg m-3)", 
+         x = "Longitude", 
+         y = "Latitude"))
 
+chlor_0703 <- raster("Parameters/chlor_a/chlor_0703.tif")
+chlor_0703_df <- as.data.frame(chlor_0703, xy = TRUE, na.rm = TRUE)
 
+(chlor_07_03 <- ggplot() +
+    geom_raster(data = chlor_0703_df, aes(x = x, y = y, fill = chlor_0703)) +
+    scale_fill_viridis_c()+
+    geom_point(data = survey_01, aes(x = lo2, y = la2), colour = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Chlorophyll-a \n(mg m-3)", 
+         x = "Longitude", 
+         y = "Latitude"))
 
+chlor_1503 <- raster("Parameters/chlor_a/chlor_1503.tif")
+chlor_1503_df <- as.data.frame(chlor_1503, xy = TRUE, na.rm = TRUE)
 
+(chlor_15_03 <- ggplot() +
+    geom_raster(data = chlor_1503_df, aes(x = x, y = y, fill = chlor_1503)) +
+    scale_fill_viridis_c()+
+    geom_point(data = survey_01, aes(x = lo2, y = la2), colour = "black", size = 0.5) +
+    coord_quickmap() +
+    ylim(64.5,68.5) +
+    xlim(-27, -10) +
+    theme_classic() + # removes defalut grey background
+    theme(legend.position = "right",
+          legend.title = element_text(size = 12, face ="bold"),
+          legend.text = element_text(size = 11)) + # removes defalut grey background
+    theme(text = element_text(size=12),		# font size
+          axis.text.x = element_text(angle = 90, hjust = 1)) +      
+    labs(fill = "Chlorophyll-a \n(mg m-3)", 
+         x = "Longitude", 
+         y = "Latitude"))
 
 
 

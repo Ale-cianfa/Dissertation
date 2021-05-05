@@ -496,22 +496,19 @@ mld_1505_df <- as.data.frame(mld_1505, xy = TRUE, na.rm = TRUE)
 
 
 ### facet for dynamic variables----
-#library(ggpubr)
+library(ggpubr)
 
 (variables <- ggarrange(sst_01_05, sst_07_052, sst_15_05,
                         chlor_01_05, chlor_07_05, chlor_15_05,
                         mld_01_05, mld_07_05, mld_15_05,
             labels = c("sst 2001", "sst 2007", "sst 2015",
-                       "Chlorphyll 2001", "Chlorphyll 2007",
-                       "Chlorphyll 2015", "MLD 2001", 
+                       "Chlorophyll  2001", "Chlorophyll  2007",
+                       "Chlorophyll  2015", "MLD 2001", 
                        "MLD 2007", "MLD 2015"),
             ncol = 2, nrow = 5))
 
-#ggsave(variables, file = "img/variables_panel.png", height = 16, width = 12)
+ggsave(variables, file = "img/variables_panel_MAY.png", height = 16, width = 12)
 
-library(wesanderson)
-
-#pal <- wes_palette("GrandBudapest2", 100, type = "continuous")
 
 
 (bat_plot_tot <- ggplot() +
@@ -772,16 +769,16 @@ mld_1504_df <- as.data.frame(mld_1504, xy = TRUE, na.rm = TRUE)
 ### facet for april dynamic variables----
 #library(ggpubr)
 
-(variables <- ggarrange(sst_01_04, sst_07_042, sst_15_04,
+(variables_april <- ggarrange(sst_01_04, sst_07_042, sst_15_04,
                         chlor_01_04, chlor_07_04, chlor_15_04,
                         mld_01_04, mld_07_04, mld_15_04,
                         labels = c("sst 2001", "sst 2007", "sst 2015",
-                                   "Chlorphyll 2001", "Chlorphyll 2007",
-                                   "Chlorphyll 2015", "MLD 2001", 
+                                   "Chlorophyll  2001", "Chlorophyll  2007",
+                                   "Chlorophyll  2015", "MLD 2001", 
                                    "MLD 2007", "MLD 2015"),
                         ncol = 2, nrow = 5))
 
-#ggsave(variables, file = "img/variables_panel_april.png", height = 16, width = 12)
+ggsave(variables_april, file = "img/variables_panel_april.png", height = 16, width = 12)
 
 
 
@@ -1014,16 +1011,16 @@ mld_1506_df <- as.data.frame(mld_1506, xy = TRUE, na.rm = TRUE)
 ### facet for june dynamic variables----
 #library(ggpubr)
 
-(variables <- ggarrange(sst_01_06, sst_07_062, sst_15_06,
+(variables_june <- ggarrange(sst_01_06, sst_07_062, sst_15_06,
                         chlor_01_06, chlor_07_06, chlor_15_06,
                         mld_01_06, mld_07_06, mld_15_06,
                         labels = c("sst 2001", "sst 2007", "sst 2015",
-                                   "Chlorphyll 2001", "Chlorphyll 2007",
-                                   "Chlorphyll 2015", "MLD 2001", 
+                                   "Chlorophyll  2001", "Chlorophyll  2007",
+                                   "Chlorophyll  2015", "MLD 2001", 
                                    "MLD 2007", "MLD 2015"),
                         ncol = 2, nrow = 5))
 
-#ggsave(variables, file = "img/variables_panel_june.png", height = 16, width = 12)
+ggsave(variables_june, file = "img/variables_panel_june.png", height = 16, width = 12)
 
 
 ## JULY----
@@ -1255,16 +1252,16 @@ mld_1507_df <- as.data.frame(mld_1507, xy = TRUE, na.rm = TRUE)
 ### facet for JULY dynamic variables----
 #library(ggpubr)
 
-(variables <- ggarrange(sst_01_07, sst_07_072, sst_15_07,
+(variables_july <- ggarrange(sst_01_07, sst_07_072, sst_15_07,
                         chlor_01_07, chlor_07_07, chlor_15_07,
                         mld_01_07, mld_07_07, mld_15_07,
                         labels = c("sst 2001", "sst 2007", "sst 2015",
-                                   "Chlorphyll 2001", "Chlorphyll 2007",
-                                   "Chlorphyll 2015", "MLD 2001", 
+                                   "Chlorophyll  2001", "Chlorophyll  2007",
+                                   "Chlorophyll  2015", "MLD 2001", 
                                    "MLD 2007", "MLD 2015"),
                         ncol = 2, nrow = 5))
 
-ggsave(variables, file = "img/variables_panel_JULY.png", height = 16, width = 12)
+ggsave(variables_july, file = "img/variables_panel_JULY.png", height = 16, width = 12)
 
 
 

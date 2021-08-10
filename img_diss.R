@@ -1310,6 +1310,7 @@ chlor_0703_df <- as.data.frame(chlor_0703, xy = TRUE, na.rm = TRUE)
 chlor_1503 <- raster("Parameters/chlor_a/chlor_1503.tif")
 chlor_1503_df <- as.data.frame(chlor_1503, xy = TRUE, na.rm = TRUE)
 
+
 (chlor_15_03 <- ggplot() +
     geom_raster(data = chlor_1503_df, aes(x = x, y = y, fill = chlor_1503)) +
     scale_fill_viridis_c()+

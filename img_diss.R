@@ -1275,6 +1275,7 @@ chlor_0103_df <- as.data.frame(chlor_0103, xy = TRUE, na.rm = TRUE)
     geom_point(data = survey_01, aes(x = lo2, y = la2), colour = "black", size = 0.5) +
     coord_quickmap() +
     ylim(64.5,68.5) +
+    
     xlim(-27, -10) +
     theme_classic() + # removes defalut grey background
     theme(legend.position = "right",

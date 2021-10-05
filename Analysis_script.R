@@ -1,6 +1,6 @@
 ## Alessandra Cianfanelli: Script for analysis
 
-## LOADING PACKAGES----
+## LOADING PACKAGES---- 
 
 library(tidyverse)
 library(ggplot2)

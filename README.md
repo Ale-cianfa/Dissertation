@@ -6,5 +6,3 @@
 
 ## Contact details
 Email: alessandra.cianfanelli@gmail.com
-
-## Important links: 
